@@ -1,0 +1,536 @@
+[
+	{
+	"word": "Alignment adjustment",
+	"definition": "The adjustment applied to the expenditure and income measures of Gross Domestic Product that allows ONS to balance these with the output measure of Gross Domestic Product."
+	},
+
+	{
+	"word": "Appreciation",
+	"definition": "An increase in the value of an asset or currency relative to another asset or currency."
+	},
+
+	{
+	"word": "Asset",
+	"definition": "An item or claim that usually provides a flow of benefits – either income or services – to its owner. Real assets include land, buildings or machinery owned. Financial assets include cash and securities, and credit extended to customers."
+	},
+
+	{
+	"word": "Balance of payments",
+	"definition": "The accounting record of UK transactions with the rest of the world, including international institutions. Also known as the Pink Book."
+	},
+
+	{
+	"word": "Balance sheet",
+	"definition": "A statement, drawn up at a particular point in time, recording the assets held by and financial claims (liabilities) of a business, organisation or country."
+	},
+
+	{
+	"word": "Base rate",
+	"definition": "Set by the Bank of England in the conduct of monetary policy, it is the rate of interest used by commercial banks as the basis for their lending rates to the public."
+	},
+
+	{
+	"word": "Basic prices",
+	"definition": "Prices excluding taxes and subsidies on products."
+	},
+
+	{
+	"word": "Blue Book",
+	"definition": "The familiar name of the ‘United Kingdom National Accounts’ produced annually by ONS. It contains estimates of Gross Domestic Product measured by the output, expenditure and income approaches."
+	},
+
+	{
+	"word": "Bond",
+	"definition": "A financial instrument that usually pays interest to the holder, issued by governments, companies and other institutions. Most bonds have a fixed date on which the borrower will repay the holder."
+	},
+
+	{
+	"word": "Business cycle",
+	"definition": "The short-run fluctuations of output around its long-term trend."
+	},
+
+	{
+	"word": "Capital",
+	"definition": "One of the factors of production, providing a stream of revenues or services to its owner. Capital can include tangible assets – such as plant or machinery – or intangible assets – such as software and knowledge."
+	},
+
+	{
+	"word": "Central Bank",
+	"definition": "The national institution that oversees the monetary system, ensures the health of the financial system and acts as lender of last resort."
+	},
+
+	{
+	"word": "Chained Volume Measures (CVM)",
+	"definition": "These time series have the effects of inflation removed by considering changes in quantity between consecutive periods, holding prices from previous periods constant."
+	},
+
+	{
+	"word": "Claimant count",
+	"definition": "The total number of individuals claiming Job Seekers Allowance (JSA)."
+	},
+
+	{
+	"word": "Compensation of employees",
+	"definition": "Total remuneration payable to employees in cash or in kind, including the value of social contributions payable by the employer."
+	},
+
+	{
+	"word": "Constant Price (KP) series",
+	"definition": "These series have the effects of inflation removed by holding prices throughout the series at the level in a chosen base year (also known as “real terms” series)."
+	},
+
+	{
+	"word": "Consumer prices",
+	"definition": "Prices offered to the public at the point of sale."
+	},
+
+	{
+	"word": "Consumer Prices Index (CPI)",
+	"definition": "A measure of the price level in the economy based on the prices of a collection of goods that are designed to reflect the consumption basket of the average consumer."
+	},
+
+	{
+	"word": "Consumption",
+	"definition": "Expenditure on goods and services designed to satisfy individual or collective wants, as distinct from their purchase for use in business processes."
+	},
+
+	{
+	"word": "Contagion",
+	"definition": "The transmission of an economic shock in one economy to other nearby or linked economies."
+	},
+
+	{
+	"word": "Cost-benefit analysis",
+	"definition": "The identification, measurement and comparison of the costs and benefits associated with a specific project or intervention to determine its net value."
+	},
+
+	{
+	"word": "Current account",
+	"definition": "Details the UK’s trade in goods and services with the rest of the world, as well as current transfers and income flows in to and out of the UK from cross-border investments."
+	},
+
+	{
+	"word": "Current price (CP) series",
+	"definition": "These series include the effects of inflation."
+	},
+
+	{
+	"word": "Debt",
+	"definition": "An obligation or liability to make a payment or a payment in kind."
+	},
+
+	{
+	"word": "Deficit",
+	"definition": "Occurs when outward financial flows exceed inward financial flows. A “government deficit” occurs when expenditure exceeds the value of tax revenues and asset sales in a given period."
+	},
+
+	{
+	"word": "Deflation",
+	"definition": "A decline in the general price level in an economy, signified by an annual inflation rate below 0% (negative)."
+	},
+
+	{
+	"word": "Deflator (implied)",
+	"definition": "A series that shows changes in price and can be used to convert nominal values into “real” values, which are adjusted for the effects of inflation. An implied deflator is a series that shows the implied change in average prices for a variable by dividing the current price series by the real or volume series."
+	},
+
+	{
+	"word": "Depreciation",
+	"definition": "A fall in the value of an asset or currency relative to another asset or currency."
+	},
+
+	{
+	"word": "Direct taxation",
+	"definition": "Taxes on income, profits and wealth, paid directly by the bearer to the tax authorities."
+	},
+
+	{
+	"word": "Disposable income",
+	"definition": "Household income after the deduction of taxes and the addition of benefits."
+	},
+
+	{
+	"word": "Dividend",
+	"definition": "A payment made to company shareholders from current or previously retained profits."
+	},
+
+	{
+	"word": "Economics",
+	"definition": "The study of the allocation of scarce resources to satisfy individual and collective wants."
+	},
+
+	{
+	"word": "Euro Area",
+	"definition": "The group of European countries that have officially adopted the euro (€) as their currency."
+	},
+
+	{
+	"word": "European Central Bank (ECB)",
+	"definition": "The central bank for the economies that are using the Euro currency, responsible for conducting monetary policy in the euro area."
+	},
+
+	{
+	"word": "European System of Accounts (ESA)",
+	"definition": "An integrated system of economic accounts. The United Kingdom National Accounts have been based on ESA 1995 since September 1998."
+	},
+
+	{
+	"word": "Exchange rate",
+	"definition": "The value of one currency in terms of a second currency."
+	},
+
+	{
+	"word": "Exports",
+	"definition": "Goods or services sold to agents in other countries; the opposite of imports."
+	},
+
+	{
+	"word": "Factory gate prices",
+	"definition": "Also known as output prices, these are the prices of goods sold by UK manufacturers. They include costs such as labour, raw materials and energy, as well as costs such as interest on loans, site maintenance or rent."
+	},
+
+	{
+	"word": "Final consumption expenditure",
+	"definition": "The expenditure on those goods and services used for the direct satisfaction of individual or collective needs, as distinct from their purchase for use in business processes."
+	},
+
+	{
+	"word": "Financial Intermediation Services Indirectly Measured (FISIM)",
+	"definition": "This represents the implicit charge for the service provided by monetary financial institutions paid for by the interest differential between borrowing and lending rather than through fees and commissions."
+	},
+
+	{
+	"word": "Fiscal policy",
+	"definition": "Taxation and spending measures that allow the government to guide the economy."
+	},
+
+	{
+	"word": "Foreign Direct Investment (FDI)",
+	"definition": "Investment by firms in another country. Outward FDI is investment by UK-based firms overseas. Inward FDI is investment by overseas firms in the UK. This is usually achieved through the purchase of a different firm or the establishment of new operations."
+	},
+
+	{
+	"word": "Frictional unemployment",
+	"definition": "The number of people who are classed as unemployed while they are moving between jobs."
+	},
+
+	{
+	"word": "Full employment",
+	"definition": "A state of the labour market in which everyone who is willing and able to work at the current wage rate is in employment, excluding those who are frictionally unemployed."
+	},
+
+	{
+	"word": "GDP(O), GDP(E), GDP(I)",
+	"definition": "These are 3 different methods of calculating gross domestic product (GDP) – a measure of economic activity. In theory, these 3 measures should equal each other. GDP(O) is the sum of all production activity with the economy (the output approach), as estimated using gross value added (GVA). GDP(E) is the sum of all final expenditures by the economy (the expenditure approach). GDP(I) is the sum of all income generated by production within the economy (the income approach)."
+	},
+
+	{
+	"word": "Gilt-edged securities (gilts)",
+	"definition": "Bonds issued by the UK government. These assets usually offer a low but certain return. Gilts are equivalent to US Treasuries and German Bunds."
+	},
+
+	{
+	"word": "Government debt",
+	"definition": "The accumulated borrowing of central and local government."
+	},
+
+	{
+	"word": "Government expenditure",
+	"definition": "Spending by national and local governments and some government-backed institutions."
+	},
+
+	{
+	"word": "Government revenue",
+	"definition": "The money government receives from taxation, plus non-tax revenues such as money from government-owned firms."
+	},
+
+	{
+	"word": "Gross Capital Formation (GCF)",
+	"definition": "Acquisitions less the disposals of fixed assets and the improvement of land."
+	},
+
+	{
+	"word": "Gross Domestic Product (GDP)",
+	"definition": "A measure of the economic activity produced by a country or region."
+	},
+
+	{
+	"word": "Gross Fixed Capital Formation (GFCF)",
+	"definition": "Acquisitions less the disposals of fixed assets and the improvement of land."
+	},
+
+	{
+	"word": "Gross National Product (GNP)",
+	"definition": "GDP plus net income from abroad."
+	},
+
+	{
+	"word": "Gross Value Added (GVA)",
+	"definition": "The value generated by any unit engaged in production and the contributions of individual sectors or industries to Gross Domestic Product."
+	},
+
+	{
+	"word": "Human Development Index (HDI)",
+	"definition": "A composite statistic based on healthcare, education and economic statistics designed to rank countries by their level of development."
+	},
+
+	{
+	"word": "Hyper-inflation",
+	"definition": "A period of very high rates of inflation, usually leading to a loss of confidence in an economy’s currency."
+	},
+
+	{
+	"word": "ILO unemployment",
+	"definition": "The International Labour Organisation’s measure of unemployment defined as a person who is either out of work and actively looking for a job or out of work and waiting to start a job in the next two weeks."
+	},
+
+	{
+	"word": "Imports",
+	"definition": "Purchases of foreign goods and services; the opposite of exports."
+	},
+
+	{
+	"word": "Income tax",
+	"definition": "A tax on earnings."
+	},
+
+	{
+	"word": "Index numbers",
+	"definition": "Data relative to a give base value, which typically refers to a year."
+	},
+
+	{
+	"word": "Indirect taxation",
+	"definition": "Taxes on expenditure (e.g. VAT). They are paid to the tax authorities, not by the consumer, but indirectly by the suppliers of the goods or services."
+	},
+
+	{
+	"word": "Inflation rate",
+	"definition": "The annual rate of change of the average price of goods and services."
+	},
+
+	{
+	"word": "Intangible assets",
+	"definition": "Intangible fixed assets include mineral exploration, computer software and entertainment, and literary and artistic originals. Expenditure on them is part of gross fixed capital formation. They exclude non-produced intangible assets such as patented entities, leases, transferable contracts and purchased goodwill, expenditure on which would be intermediate consumption."
+	},
+
+	{
+	"word": "Interest rate",
+	"definition": "The cost of borrowing expressed at an annual rate: the amount of interest that would be paid during a year divided by the amount of money loaned."
+	},
+
+	{
+	"word": "Intermediate consumption",
+	"definition": "The consumption of goods and services in the production process. It may be contrasted with final consumption and capital formation."
+	},
+
+	{
+	"word": "International Monetary Fund (IMF)",
+	"definition": "A Fund set up as a result of the Bretton Woods Conference of 1944 and that began operations in 1947. It includes most of the major economies of the world. The Fund was set up to supervise the fixed exchange rate system agreed at Bretton Woods and to make available to its members a pool of foreign exchange resources to assist them when they have balance of payments difficulties."
+	},
+
+	{
+	"word": "Inventories (stocks)",
+	"definition": "Consist of finished goods (held by the producer prior to sale, further processing or other use) and products (materials and fuel) acquired from other producers to be used for intermediate consumption or resold without further processing."
+	},
+
+	{
+	"word": "Investment",
+	"definition": "Spending on capital goods."
+	},
+
+	{
+	"word": "Liabilities",
+	"definition": "A claim on an institutional unit by another body that gives rise to a payment or other transaction transferring assets to the other body."
+	},
+
+	{
+	"word": "Liquidity",
+	"definition": "The ease with which a financial instrument can be exchanged for goods and services. Cash is very liquid whereas a life assurance policy is less so."
+	},
+
+	{
+	"word": "Macroeconomics",
+	"definition": "The branch of economics that deals with the whole economy in terms of aggregated variables such as output, consumption, investment, government spending and net trade."
+	},
+
+	{
+	"word": "Manufacturing",
+	"definition": "As a general rule, activities in the manufacturing section involve the transformation of materials into new products. Their output is a new product."
+	},
+
+	{
+	"word": "Market failure",
+	"definition": "Instances when a market outcome delivers a suboptimal or inefficient allocation of resources. These include situations of imperfect information, barriers to entry or natural monopoly."
+	},
+
+	{
+	"word": "Microeconomics",
+	"definition": "The branch of economics that studies individual economic agents and units: individuals, households, firms and industries."
+	},
+
+	{
+	"word": "Mixed income",
+	"definition": "The balancing item in the income account for unincorporated businesses owned by households. The owner or members of the same household often provide unpaid labour inputs to the business. The surplus is therefore a mixture of remuneration for such labour and return to the owner as entrepreneur."
+	},
+
+	{
+	"word": "Monetary policy",
+	"definition": "Policy to affect the supply or cost of money (rate of interest)."
+	},
+
+	{
+	"word": "Money supply",
+	"definition": "The amount of money available in an economy."
+	},
+
+	{
+	"word": "Multi-factor productivity (MFP)",
+	"definition": "The difference between the rate of change of output and the rate of change of total inputs. It is calculated as a residual, which can be thought of as capturing technological progress, including the effect of changes in management techniques and business processes or more efficient use of factor inputs."
+	},
+
+	{
+	"word": "Multiplier effect",
+	"definition": "A measure of how one economic action influences other economic activities. The fiscal multiplier, for instance, is the amount that GDP increases for each extra pound of expenditure. For example, government spending on a new hospital could also see businesses benefit that supply the hospital and local retail outlets for the staff."
+	},
+
+	{
+	"word": "National accounts",
+	"definition": "An integrated description of all economic activity within the economic territory of the UK, including activity involving both domestic units (i.e. individuals and institutions resident in the UK) and external units (those resident in other countries)."
+	},
+
+	{
+	"word": "National debt",
+	"definition": "The accumulated effect of budget deficits (less surpluses): the total stock of outstanding government debt."
+	},
+
+	{
+	"word": "National income",
+	"definition": "Everything produced, earned and spent in a country. An economy’s net national product, subtracting depreciation from GNP at basic prices."
+	},
+
+	{
+	"word": "Natural rate of unemployment",
+	"definition": "The lowest rate of unemployment at which job markets can be in stable equilibrium."
+	},
+
+	{
+	"word": "Non-profit institutions serving households (NPISH)",
+	"definition": "An institutional sector consisting of non-profit institutions that are not mainly financed and controlled by government and provide goods or services to households for free or at prices that are not economically significant. These include bodies such as charities, universities, churches and trade unions."
+	},
+
+	{
+	"word": "Non seasonally adjusted",
+	"definition": "A series that includes seasonal or calendar effects."
+	},
+
+	{
+	"word": "Office for Budget Responsibility (OBR)",
+	"definition": "Created in 2010 to produce official independent forecasts of the UK economy as well as authoritative analysis of the UK’s public finances."
+	},
+
+	{
+	"word": "Opportunity cost of a good",
+	"definition": "The quantity of other goods sacrificed to get another unit of that good."
+	},
+
+	{
+	"word": "Output gap",
+	"definition": "The difference between actual and potential output."
+	},
+
+	{
+	"word": "Potential output",
+	"definition": "Output when all inputs are fully employed."
+	},
+
+	{
+	"word": "Producer prices",
+	"definition": "The prices faced by producers. The input price is the cost of goods bought by UK manufacturers for use in manufacturing. The output price (factory gate price) is the price of goods sold by UK manufacturers."
+	},
+
+	{
+	"word": "Productivity",
+	"definition": "A measure of the efficiency of output relative to inputs. For example, productivity will have increased if more is produced with the same amount of inputs. It can be applied to the individual factors of production – most commonly labour – or collectively."
+	},
+
+	{
+	"word": "Purchasing Power Parity (PPP)",
+	"definition": "The path of the nominal exchange rate that would maintain a constant real exchange rate. Nominal exchange rate changes offset inflation differentials between countries."
+	},
+
+	{
+	"word": "Quantitative Easing (QE)",
+	"definition": "A form of monetary policy in which a Central Bank buys financial assets – usually government bonds – to raise the money supply in an economy."
+	},
+
+	{
+	"word": "Quarterly National Accounts (QNA)",
+	"definition": "The third estimate of UK GDP based on around 92% of all survey data."
+	},
+
+	{
+	"word": "Real exchange rate",
+	"definition": "A country’s exchange rate adjusted for the relative price movements of tradable goods and services."
+	},
+
+	{
+	"word": "Real household disposable income",
+	"definition": "The amount of income available for a household after taxes and subsidies, adjusted to remove the effects of inflation."
+	},
+
+	{
+	"word": "Real interest rate",
+	"definition": "The real rate of return on an asset, calculated by adjusting the interest received by the rate of inflation."
+	},
+
+	{
+	"word": "Retail prices",
+	"definition": "The price of goods offered to the consumer."
+	},
+
+	{
+	"word": "RPI, RPI(X), RPI(Y), RPI(J)",
+	"definition": "The Retail Prices Index (RPI) is a measure of inflation, but unlike the CPI, it incorporates housing costs. RPI(X) excludes mortgage interest payments, RPI(Y) is adjusted for changes in interest rate and indirect taxes, and RPI(J) uses an alternative calculation method for some prices that is in line with international standards. The RPI is not a National Statistic."
+	},
+
+	{
+	"word": "Saving ratio",
+	"definition": "The ratio of personal saving to disposable income."
+	},
+
+	{
+	"word": "Seasonally adjusted",
+	"definition": "A widely used technique for removing seasonal or calendar effects from time series data."
+	},
+
+	{
+	"word": "Services",
+	"definition": "A large and diverse grouping of industries that produce intangible economic output."
+	},
+
+	{
+	"word": "Services Producer Prices Index (SPPI)",
+	"definition": "Contains individual price indices that provide information on price change for a limited range of service industries."
+	},
+
+	{
+	"word": "Standard Industrial Classification (SIC)",
+	"definition": "The industrial classification applied to the collection and publication of a wide range of economic statistics."
+	},
+
+	{
+	"word": "Structural unemployment",
+	"definition": "Reflects the mismatch of skills and job opportunities as the pattern of demand and supply changes."
+	},
+
+	{
+	"word": "Unit labour costs",
+	"definition": "Reflect total labour costs, including social security and employers’ pension contributions, and including the costs of self-employed labour, incurred in the production of a unit of economic output."
+	},
+
+	{
+	"word": "Value Added Tax (VAT)",
+	"definition": "A tax on consumption, which is paid to the tax authorities by the seller on behalf of the consumer. It is not levied on goods used as intermediate consumption."
+	}
+]

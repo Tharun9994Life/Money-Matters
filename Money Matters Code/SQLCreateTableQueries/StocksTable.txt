@@ -1,0 +1,7 @@
+CREATE TABLE Stocks (
+    StockID INT IDENTITY(1,1),
+    StockName VARCHAR(60) UNIQUE,
+	AskPrice DECIMAL(10, 2) NOT NULL,
+    LastUpdated DATETIME NOT NULL DEFAULT GETDATE(),
+	PRIMARY KEY (StockID)
+);

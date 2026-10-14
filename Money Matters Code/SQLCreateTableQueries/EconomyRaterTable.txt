@@ -1,0 +1,9 @@
+CREATE TABLE EconomyRater (
+    RatingID INT IDENTITY (1,1) NOT NULL,
+	ConsumerID INT NOT NULL,
+	ConsumerOpinionDate DATE default GETDATE(),
+    ConsumerOpinionFile VARCHAR(30) NOT NULL,
+    ConsumerOpinion INT NOT NULL,
+	PRIMARY KEY (RatingID),
+	FOREIGN KEY (ConsumerID) REFERENCES Consumers(ConsumerID)
+);

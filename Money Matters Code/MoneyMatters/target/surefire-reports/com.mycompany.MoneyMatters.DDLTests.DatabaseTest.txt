@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.mycompany.MoneyMatters.DDLTests.DatabaseTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.099 s -- in com.mycompany.MoneyMatters.DDLTests.DatabaseTest

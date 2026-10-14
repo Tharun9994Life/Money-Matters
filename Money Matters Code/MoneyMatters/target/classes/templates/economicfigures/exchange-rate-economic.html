@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="stylesheet" href="/css/exchange-rate-economic.css"/>
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <div id="all">
+        <h1>Exchange Rates</h1>
+
+        <!-- Navigation bar -->
+        <nav id="dashboardNavbar">
+            <a th:href="@{/news}">Economic News</a>
+            <a th:href="@{/figures-economic}">Economic Figures</a>
+            <a th:href="@{/exchange-rate-economic}">Exchange Rates</a>
+            <a th:href="@{/rate-the-economy}">Rate The Economy</a>
+            <a th:href="@{/budget-tracker}">Budget Tracker</a>
+            <a th:href="@{/investor}">Investor Centre</a>
+            <a th:href="@{/cost-of-production}">Cost Of Production</a>
+            <a th:href="@{/user-dashboard}">DashBoard</a>
+        </nav>
+
+        <!-- Form to select base/wanted currency and date -->
+        <div>
+            <form id="compare2Currencies" action="/exchange-rate-economic" method="post">    
+                <label>Select the Base Currency:</label>
+                <select id="baseCurrency" name="baseCurrency">
+                    <option th:each="entry : ${avaliableCurrencies}"
+                            th:value="${entry.value}"
+                            th:text="${entry.key}"
+                            th:selected="${selectedBaseCurrency} == ${entry.value}">
+                    </option>
+                </select>
+                <br>
+
+                <label>Select the Wanted Currency:</label>
+                <select id="wantedCurrency" name="wantedCurrency">
+                    <option th:each="entry : ${avaliableCurrencies}"
+                            th:value="${entry.value}"
+                            th:text="${entry.key}"
+                            th:selected="${selectedWantedCurrency} == ${entry.value}">
+                    </option>
+                </select>
+                <br>
+
+                <label>Select a Time Period:</label>
+                <input type="date" id="date" name="date" required>
+                <br>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <!-- Container for exchange rate graph -->
+        <div id="graphContainer"></div>
+
+        <!-- Container for dynamic currency converter -->
+        <div id="currencyConverter"></div>
+    </div>
+
+    <script type="module" th:inline="javascript">
+        import { format } from "https://cdn.skypack.dev/date-fns";
+
+        // Set default date in the form to yesterday's date and restrict max date
+        function setDefaultDate() {
+            let dateInput = document.getElementById("date");
+            let latestDate = new Date();
+            latestDate.setDate(latestDate.getDate() - 1); // yesterday
+            latestDate = latestDate.toISOString().split('T')[0];
+
+            dateInput.value = latestDate; 
+            dateInput.max = latestDate;
+        }
+
+        // Draw line graph of selected currency pair over time
+        function drawGraph() {
+            let seriesOfCurrencies = /*[[${seriesOfCurrencies}]]*/ {};
+            let baseCurrency = /*[[${baseCurrency}]]*/ "";
+            let wantedCurrency = /*[[${wantedCurrency}]]*/ "";
+
+            if (seriesOfCurrencies && Object.keys(seriesOfCurrencies).length > 0) {
+                let years = Object.keys(seriesOfCurrencies); // x-axis
+                let data = Object.values(seriesOfCurrencies); // y-axis
+
+                var line1 = {
+                    x: years,
+                    y: data,
+                    type: 'scatter',
+                    name: baseCurrency + " to " + wantedCurrency
+                };
+
+                var plotting = [line1];
+                
+                var layout = {
+                    title: baseCurrency + " to " + wantedCurrency,
+                    xaxis: {title: "Year"},
+                    yaxis: {title: /*[[${wantedCurrency}]]*/ ""},
+                    dragmode: false,
+                    zoom: false,
+                    paper_bgcolor: "transparent",
+                    plot_bgcolor: "transparent"
+                };
+
+                Plotly.newPlot("graphContainer", plotting, layout, {displayModeBar: false, responsive: true});
+            }
+        }
+
+        // Display currency converter UI and calculation
+        function showCurrencyConverter() {
+            let date = /*[[${date}]]*/ "";
+            let baseCurrency = /*[[${baseCurrency}]]*/ "";
+            let wantedCurrency = /*[[${wantedCurrency}]]*/ "";
+            let convertedCurrency = /*[[${convertedCurrency}]]*/ "";
+
+            if (date !== null) { 
+                const currencyConverterDiv = document.getElementById("currencyConverter");
+
+                // Heading
+                const currencyConverterH2 = document.createElement("h2");
+                currencyConverterH2.innerText = "Currency Converter";
+                currencyConverterDiv.append(currencyConverterH2);
+
+                // Format and show date
+                date = new Date(date);
+                date = format(date, "dd/MM/yyyy");
+
+                const dateSpan = document.createElement("span");
+                dateSpan.innerText = "Date: " + date;
+                currencyConverterDiv.append(dateSpan);
+
+                // Show conversion rate
+                const baseToWantCurrencySpan = document.createElement("span");
+                let convertedCurrency2dp = parseFloat(convertedCurrency).toFixed(2);
+                baseToWantCurrencySpan.innerText = "1.00 " + baseCurrency + " = " + convertedCurrency2dp + " " + wantedCurrency;
+                currencyConverterDiv.append(baseToWantCurrencySpan);
+                currencyConverterDiv.append(document.createElement("br"));
+
+                // Input for custom amount to convert
+                let convertCurrencySpan = document.createElement("span");
+                convertCurrencySpan.innerText = "Enter " + baseCurrency + ":";
+                currencyConverterDiv.append(convertCurrencySpan);
+
+                let initialCurrency = document.createElement("input");
+                initialCurrency.type = "number";
+                initialCurrency.step = "0.01";
+                initialCurrency.min = "0.01";
+                initialCurrency.required = true;
+                currencyConverterDiv.append(initialCurrency);
+
+                let convertCurrencyButton = document.createElement("button");
+                convertCurrencyButton.textContent = "Convert Currency";
+                currencyConverterDiv.append(convertCurrencyButton);
+
+                const baseToWantCurrencySpan2 = document.createElement("span");
+
+                // Convert on button click
+                convertCurrencyButton.addEventListener("click", function() {
+                    if (initialCurrency.checkValidity()) {
+                        baseToWantCurrencySpan2.innerText = parseFloat(initialCurrency.value).toFixed(2) + " " + baseCurrency + " = " + calculateConvertedCurrency(convertedCurrency, initialCurrency) + " " + wantedCurrency;
+                        currencyConverterDiv.append(baseToWantCurrencySpan2);
+                    }
+                });
+            }
+        }
+
+        // Calculate converted currency based on rate
+        function calculateConvertedCurrency(convertedCurrency, initialCurrency) {
+            return (convertedCurrency * initialCurrency.value).toFixed(2);
+        }
+
+        // Reset CSS for empty converter container to avoid unwanted styles
+        function resetCSS() {
+            const currencyConverterDiv = document.getElementById("currencyConverter");
+
+            if (currencyConverterDiv.innerHTML.trim() === "") {
+                currencyConverterDiv.style.all = "unset";
+            }
+        }
+
+        // Call functions to display all dynamic data
+        setDefaultDate();
+        drawGraph();
+        showCurrencyConverter();
+        resetCSS();
+    </script>
+</body>
+</html>

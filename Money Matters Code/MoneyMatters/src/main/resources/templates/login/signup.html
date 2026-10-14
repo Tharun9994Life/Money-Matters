@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="/css/signup.css" />
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <h1>Register</h1>
+
+    <div id="centreDiv">
+        <!-- Sign-up form -->
+        <form id="signup-inputs" action="/signup" method="post">
+
+            <!-- First Name input -->
+            <div class="inputWrapper">
+                <label>First Name:</label>
+                <input type="text" id="firstName" name="firstName" placeholder="John" required>
+            </div>
+
+            <!-- Last Name input -->
+            <div class="inputWrapper">
+                <label>Last Name:</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+            </div>
+
+            <!-- Age input -->
+            <div class="inputWrapper">
+                <label>Age:</label>
+                <input type="number" id="age" name="age" placeholder="18" required>
+            </div>
+
+            <!-- Date of Birth input -->
+            <div class="inputWrapper">
+                <label>Date Of Birth:</label>
+                <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+            </div>
+
+            <!-- Email input -->
+            <div class="inputWrapper">
+                <label>Email:</label>
+                <input type="text" id="email" name="email" placeholder="johndoe123@gmail.com" required>
+            </div>
+
+            <!-- Phone Number input -->
+            <div class="inputWrapper">
+                <label>Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="+44" required>
+            </div>
+
+            <!-- Password input with show/hide toggle -->
+            <div class="inputWrapper">
+                <label>Password:</label>
+                <div class="passwordField">
+                    <input type="password" id="password" name="password" placeholder="********" required>
+                    <!-- Eye icon to toggle password visibility -->
+                    <img id="showPasswordImage" src="/images/view.png">
+                </div>
+            </div>
+
+            <!-- Radio buttons for Economic Agent type -->
+            <div class="inputWrapper">
+                <label>Select Economic Agent:</label>
+                <div class="radioOptions">
+                    <label class="typeOfEconomicAgentRadio">
+                        <input type="radio" name="typeOfEconomicAgent" value="Consumer" required> Consumer
+                    </label>
+                    <label class="typeOfEconomicAgentRadio">
+                        <input type="radio" name="typeOfEconomicAgent" value="Producer"> Producer
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit and back buttons -->
+            <div id="signUpButtons">
+                <button type="submit">Create Account</button>
+                <a id="backToHomeButton" th:href="@{/start}">Back To Home</a>
+            </div>
+
+        </form>
+    </div>
+
+    <script th:inline="javascript">
+        // Toggle the password visibility when eye icon is clicked
+        function showPassword() {
+            const passwordInput = document.getElementById("password");
+            const buttonImage = document.getElementById("showPasswordImage");
+            const isShow = passwordInput.type === "text";
+
+            if (isShow) {
+                // Hide password
+                passwordInput.type = "password";
+                buttonImage.src = "/images/view.png";
+            } 
+            
+            else {
+                // Show password
+                passwordInput.type = "text";
+                buttonImage.src = "/images/hide.png";
+            }
+        }
+
+        // Show alert
+        function showWindowsAlert() {
+            let windowsAlert = /*[[${windowsAlert}]]*/ false;
+            let windowsAlertMessage = /*[[${windowsAlertMessage}]]*/ "";
+
+            if (windowsAlert === true) {
+                window.alert(windowsAlertMessage);
+            }
+        }
+
+        // Attach event listener to the eye icon
+        document.getElementById("showPasswordImage").addEventListener("click", showPassword); 
+        
+        window.onload = showWindowsAlert;
+    </script>
+</body>
+</html>

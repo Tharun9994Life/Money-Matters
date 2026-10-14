@@ -1,0 +1,12 @@
+CREATE TABLE FactorInput (
+    FactorInputID INT IDENTITY(1,1),
+	ProducerID INT NOT NULL,
+    FactorInputType VARCHAR(20) NOT NULL,
+    FactorInputName VARCHAR(30) NOT NULL,
+	FactorInputDescription VARCHAR(50) NOT NULL,
+    MarginalCost DECIMAL (10, 2) NOT NULL,
+	MarginalRevenue DECIMAL (10, 2) NOT NULL,
+	MarginalProfit DECIMAL (10, 2) NOT NULL,
+	PRIMARY KEY (FactorInputID),
+	FOREIGN KEY (ProducerID) REFERENCES Producers(ProducerID)
+);

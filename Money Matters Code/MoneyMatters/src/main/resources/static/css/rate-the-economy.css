@@ -1,0 +1,200 @@
+body {
+    margin: 1vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #d4e9cd;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 70px;
+}
+
+#all {
+    padding: 20px;
+    background-color: #ffffff9e;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 1020px;
+    max-width: 1020px;
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+#dashboardNavbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #20e3448f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+#dashboardNavbar a {
+    text-decoration: none;
+    color: #000000;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#dashboardNavbar a:hover {
+    background-color: #20e344cc;
+    transform: translateY(-1px);
+}
+
+button[type="submit"], input[type="submit"] {
+    padding: 0.5em 1em;
+    background-color: #20e3448f;
+    border: 1px solid #000000;
+    color: #000000;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s ease, transform 0.1s ease;
+    width: 150px;
+}
+
+button[type="submit"]:hover, input[type="submit"]:hover {
+    background-color: #20e344cc;
+    transform: translateY(-1px);
+}
+
+#rateTheEconomyForm {
+    padding: 20px;
+}
+
+label.question {
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    display: block;
+    text-align: left;
+}
+
+label.options {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border: 2px solid #00000024;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+label.options input[type="radio"] {
+    display: none;
+}
+
+label.options:hover {
+    background-color: #d0edc2;
+    transform: translateY(-1px);
+}
+
+label.options input[type="radio"]:checked + span {
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 12px 16px;
+}
+
+#latestConsumerOpinion {
+    margin-top: -25px;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: left;
+}
+
+#latestConsumerOpinion span {
+    margin: 5px 0;
+    font-size: 1.2rem;
+    color: #000000;
+}
+
+#averageConsumerOpinion {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: left;
+}
+
+#averageConsumerOpinion span {
+    margin: 5px 0;
+    font-size: 1.2rem;
+    color: #000000;
+}
+
+#allUserOpinions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+#chooseDateDiv {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+
+#chooseDateForm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#chooseDateForm label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+#selectedDate {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #00000024;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#chooseDateForm input[type="submit"] {
+    padding: 0.5em 1em;
+    background-color: #20e3448f;
+    border: 1px solid #000000;
+    color: #000000;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s ease, transform 0.1s ease;
+    width: 150px;
+}
+
+#chooseDateForm input[type="submit"]:hover {
+    background-color: #20e344cc;
+    transform: translateY(-1px);
+}

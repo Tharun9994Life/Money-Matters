@@ -1,0 +1,117 @@
+[
+  {
+    "question": "Do you think that the economy is positively contributing to your personal wellbeing?",
+    "answers": {
+      "Yes, Significantly": 5,
+      "Yes, Somewhat": 4,
+      "Neutral": 3,
+      "No, not really": 2,
+      "No, not at all": 1
+    }
+  },
+  {
+    "question": "Compared to last month, do you think the economy is:",
+    "answers": {
+      "Much Better": 5,
+      "Slightly Better": 4,
+      "About the same": 3,
+      "Slightly Worse": 2,
+      "Much Worse": 1
+    }
+  },
+  {
+    "question": "Over the next 3 years, how do you feel the economy will change?",
+    "answers": {
+      "Improve greatly": 5,
+      "Improve somewhat": 4,
+      "Stay the same": 3,
+      "Worsen somewhat": 2,
+      "Worsen greatly": 1
+    }
+  },
+  {
+    "question": "How would you describe the overall condition of the economy right now?",
+    "answers": {
+      "Thriving": 5,
+      "Stable": 4,
+      "Mixed": 3,
+      "Struggling": 2,
+      "In Crisis": 1
+    }
+  },
+  {
+    "question": "In the past 3 months, your cost of living has:",
+    "answers": {
+      "Decreased": 5,
+      "Stayed the Same": 4,
+      "Increased Slightly": 3,
+      "Increased Significantly": 2,
+      "Become unmanageable": 1
+    }
+  },
+  {
+    "question": "Inflation over the next year will:",
+    "answers": {
+      "Dropped significantly": 5,
+      "Dropped slightly": 4,
+      "Stays stable": 3,
+      "Increase slightly": 2,
+      "Increase significantly": 1,
+      "Not Sure": 0
+    }
+  },
+  {
+    "question": "How secure do you feel in your current job or income source?",
+    "answers": {
+      "Very Secure": 5,
+      "Somewhat Secure": 4,
+      "Neutral": 3,
+      "Somewhat Insecure": 2,
+      "Very Insecure": 1
+    }
+  },
+  {
+    "question": "Do you expect job opportunities to increase, decrease, or stay the same in your area?",
+    "answers": {
+      "Increase Significantly": 5,
+      "Increase Slightly": 4,
+      "Stay the Same": 3,
+      "Decrease Slightly": 2,
+      "Decrease Significantly": 1
+    }
+  },
+  {
+    "question": "Approximately, what is the total value of your assets (property, investments, savings, etc.)?",
+    "answers": {
+      "Over £500,000": 6,
+      "£200,000 - £500,000": 5,
+      "£100,000 - £200,000": 4,
+      "£50,000 - £100,000": 3,
+      "£10,000 - £50,000": 2,
+      "Less than £10,000": 1,
+      "Preferred Not To Say": 0
+    }
+  },
+  {
+    "question": "Approximately, what is your annual salary?",
+    "answers": {
+      "Over £150,000": 6,
+      "£100,000 - £150,000": 5,
+      "£50,000 - £100,000": 4,
+      "£25,000 - £50,000": 3,
+      "£10,000 - £25,000": 2,
+      "Less than £10,000": 1,
+      "Prefer Not To Say": 0
+    }
+  },
+  {
+    "question": "Do you believe current economic policies are working in your favour?",
+    "answers": {
+      "Yes, Strongly": 5,
+      "Somewhat": 4,
+      "Neutral": 3,
+      "Not Really": 2,
+      "Definitely Not": 1
+    }
+  }
+]

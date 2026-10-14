@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #d4e9cd;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.inputWrapper {
+    width: 35vw;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #000000;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    height: 6vh;
+    padding: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.passwordField {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.passwordField input {
+    flex: 1;
+}
+
+.passwordField img {
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+#loginButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    width: 35vw;
+}
+
+#loginButtons button {
+    margin-bottom: 12px;
+    width: 100%;
+    height: 5vh;
+    background-color: #20e3448f;
+    border: solid black 1px;
+    color: #000000;
+    font-size: 16px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#loginButtons button:hover {
+    background-color: #20e344c5;
+}
+
+#backToHomeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35vw;
+    height: 5vh;
+    margin-bottom: 12px;
+    background-color: #20e3448f;
+    border: solid black 1px;
+    color: #000000;
+    font-size: 16px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#backToHomeButton:hover {
+    background-color: #20e344c5;
+}
+
+input:focus {
+    outline: none;
+    border-color: #20e344;
+    box-shadow: 0 0 3px #20e344;
+}

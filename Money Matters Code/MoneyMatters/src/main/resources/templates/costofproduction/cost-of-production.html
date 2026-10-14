@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="stylesheet" href="/css/cost-of-production.css"/>
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <div id="all">
+        <h1>Cost Of Production</h1>
+
+        <!-- Navigation bar  -->
+        <nav id="dashboardNavbar">
+            <a th:href="@{/news}">Economic News</a>
+            <a th:href="@{/figures-economic}">Economic Figures</a>
+            <a th:href="@{/exchange-rate-economic}">Exchange Rates</a>
+            <a th:href="@{/rate-the-economy}">Rate The Economy</a>
+            <a th:href="@{/budget-tracker}">Budget Tracker</a>
+            <a th:href="@{/investor}">Investor Centre</a>
+            <a th:href="@{/cost-of-production}">Cost Of Production</a>
+            <a th:href="@{/user-dashboard}">DashBoard</a>
+        </nav>
+
+        <!-- Table displaying company factor input details -->
+        <div id="allFactorInputsDiv">
+            <h2>Company Details</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Marginal Cost (£)</th>
+                        <th>Marginal Revenue (£)</th>
+                        <th>Marginal Profit (£)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableContents"></tbody>
+            </table>
+        </div>
+
+        <!-- Form to insert new factor input -->
+        <div id="factorInputInsertDiv">
+            <h2>Insert Factor Input</h2>
+            <form id="factorInputInsert" action="/cost-of-production" method="post">
+                <input type="hidden" name="formName" value="factorInputInsert"/>
+                
+                <!-- Type selection -->
+                <label>Enter Type of Factor Input</label>
+                <select id="factorInputType" name="factorInputType">
+                    <option value="Capital">Capital</option>
+                    <option value="Labour">Labour</option>
+                </select>
+                </br>
+
+                <!-- Name, description, marginal cost & revenue inputs -->
+                <label>Name of Factor Input:</label>
+                <input type="text" id="factorInputName" name="factorInputName"/>
+                </br>
+
+                <label>Provide a Description of the Factor:</label>
+                <input type="text" id="factorInputDescription" name="factorInputDescription"/>
+                </br>
+
+                <label>What is Marginal Cost of the factor input:</label>
+                <input type="number" id="marginalCost" name="marginalCost" step="0.01" placeholder="7.30"/>
+                </br>
+
+                <label>What is Marginal Revenue of the factor input:</label>
+                <input type="number" id="marginalRevenue" name="marginalRevenue" step="0.01" placeholder="10.40"/>
+                </br>
+
+                <button type="submit">Submit</button>
+                </br>
+            </form>
+        </div>
+
+        <!-- Display overall cost/revenue/profit summary -->
+        <div id="costOfProductionInformation">
+            <h2>Current Data</h2>
+        </div>
+
+        <!-- Form to calculate optimal factor input based on maximum cost -->
+        <div id="optimalFactorInput">
+            <h2>Optimal Workers</h2>
+            <form id="factorInputInsert" action="/cost-of-production" method="post">
+                <input type="hidden" name="formName" value="optimalFactorInput"/>
+                <label>Enter The Maximum Cost (this will be used to find the optimal workers):</label>
+                <input type="number" id="maximumCost" name="maximumCost" step="0.01"/>
+                </br>
+                <button type="submit">Submit</button>
+                </br>
+            </form>
+        </div>
+
+        <!-- Form to update existing factor input -->
+        <div id="factorInputUpdateDiv">
+            <h2>Update Factor Input</h2>
+            <form id="factorInputUpdate" action="/cost-of-production" method="post">
+                <input type="hidden" name="formName" value="factorInputUpdate"/>
+                <label>Select Factor Input</label>
+                <select id="factorInputName" name="factorInputName">
+                    <option th:each="entry : ${allFactorInputs}"
+                            th:value="${entry.value.factorInputName}"
+                            th:text="${entry.key}">
+                    </option>
+                </select>
+                </br>
+
+                <label>Change Marginal Cost of the factor input:</label>
+                <input type="number" id="marginalCost" name="marginalCost" step="0.01" placeholder="7.30"/>
+                </br>
+
+                <label>Change Marginal Revenue of the factor input:</label>
+                <input type="number" id="marginalRevenue" name="marginalRevenue" step="0.01" placeholder="10.40"/>
+                </br>
+
+                <button type="submit">Submit</button>
+                </br>
+            </form>
+        </div>
+
+        <!-- Form to delete (fire) factor input -->
+        <div id="factorInputDeleteDiv">
+            <h2>Fire Factor Input</h2>
+            <form id="factorInputDelete" action="/cost-of-production" method="post">
+                <input type="hidden" name="formName" value="factorInputDelete"/>
+                <label>Fire Factor Input</label>
+                <select id="factorInputDelete" name="factorInputDelete">
+                    <option th:each="entry : ${allFactorInputs}"
+                            th:value="${entry.value.factorInputName}"
+                            th:text="${entry.key}">
+                    </option>
+                </select>
+                </br>
+                
+                <button type="submit">Submit</button>
+                </br>
+            </form>
+        </div>
+
+        <!-- Undo last operation -->
+        <form id="undo" action="/cost-of-production" method="post">
+            <input type="hidden" name="formName" value="undo"/>
+            <input type="submit" value="Undo"/>
+            </br>
+        </form>
+
+        <!-- Container for Plotly graph of costs & revenue -->
+        <div id="graphContainer"></div>
+
+    </div>
+
+    <script th:inline="javascript">
+        // Function to show alert if server sets windowsAlert to true
+        function showWindowsAlert() {
+            let windowsAlert = /*[[${windowsAlert}]]*/ false;
+            let windowsAlertMessage = /*[[${windowsAlertMessage}]]*/ "";
+
+            if (windowsAlert === true) {
+                window.alert(windowsAlertMessage);
+            }
+        }
+
+        // Function to display cost of production summary information
+        function showCostOfProductionInformation() {
+            const currentDiv = document.getElementById("costOfProductionInformation");
+
+            const numberOfLabour = /*[[${numberOfLabour}]]*/ "";
+            const numberOfLabourSpan = document.createElement("span");
+            numberOfLabourSpan.innerText = "Total Labour: " + numberOfLabour;
+            currentDiv.append(numberOfLabourSpan);
+
+            const numberOfCapital = /*[[${numberOfCapital}]]*/ "";
+            const numberOfCapitalSpan = document.createElement("span");
+            numberOfCapitalSpan.innerText = "Total Capital: " + numberOfCapital;
+            currentDiv.append(numberOfCapitalSpan);
+
+            const totalCost = /*[[${totalCost}]]*/ "";
+            const totalCostSpan = document.createElement("span");
+            totalCostSpan.innerText = "Total Cost: £" + totalCost;
+            currentDiv.append(totalCostSpan);
+
+            const averageCost = /*[[${averageCost}]]*/ "";
+            const averageCostSpan = document.createElement("span");
+            averageCostSpan.innerText = "Average Cost: £" + averageCost;
+            currentDiv.append(averageCostSpan);
+
+            const totalRevenue = /*[[${totalRevenue}]]*/ "";
+            const totalRevenueSpan = document.createElement("span");
+            totalRevenueSpan.innerText = "Total Revenue: £" + totalRevenue;
+            currentDiv.append(totalRevenueSpan);
+
+            const averageRevenue = /*[[${averageRevenue}]]*/ "";
+            const averageRevenueSpan = document.createElement("span");
+            averageRevenueSpan.innerText = "Average Revenue: £" + averageRevenue;
+            currentDiv.append(averageRevenueSpan);
+
+            const totalProfit = /*[[${totalProfit}]]*/ "";
+            const totalProfitSpan = document.createElement("span");
+            totalProfitSpan.innerText = "Total Profit: £" + totalProfit;
+            currentDiv.append(totalProfitSpan);
+
+            const averageProfit = /*[[${averageProfit}]]*/ "";
+            const averageProfitSpan = document.createElement("span");
+            averageProfitSpan.innerText = "Average Profit: £" + averageProfit;
+            currentDiv.append(averageProfitSpan);
+
+            const cobbDouglasFunction = /*[[${cobbDouglasFunction}]]*/ "";
+            const cobbDouglasFunctionSpan = document.createElement("span");
+            cobbDouglasFunctionSpan.innerText = "Addition to GDP: " + cobbDouglasFunction;
+            currentDiv.append(cobbDouglasFunctionSpan);
+        }
+
+        // Function to display optimal factor input results
+        function showOptimalFactorInput() {
+            const currentDiv = document.getElementById("optimalFactorInput");
+
+            const bestCombination = /*[[${bestCombination}]]*/ {};
+            for (let i = 0; i < bestCombination.length; i++) {
+                const bestCombinationSpan = document.createElement("span");
+                bestCombinationSpan.innerText = bestCombination[i].factorInputName + " Profit: £" + bestCombination[i].marginalProfit.toFixed(2);
+                currentDiv.append(bestCombinationSpan);
+            }
+        }
+
+        // Function to populate factor input table
+        function showTable() {
+            const tableBody = document.getElementById("tableContents");
+            let allFactorInputs = /*[[${allFactorInputs}]]*/ {};
+            allFactorInputs = Object.values(allFactorInputs);
+
+            for (let i = 0; i < allFactorInputs.length; i++) {
+                const row = document.createElement("tr");
+                const cell1 = document.createElement("td");
+                const cell2 = document.createElement("td");
+                const cell3 = document.createElement("td");
+                const cell4 = document.createElement("td");
+                const cell5 = document.createElement("td");
+                const cell6 = document.createElement("td");
+
+                cell1.textContent = allFactorInputs[i].factorInputType;
+                cell2.textContent = allFactorInputs[i].factorInputName;
+                cell3.textContent = allFactorInputs[i].factorInputDescription;
+                cell4.textContent = allFactorInputs[i].marginalCost.toFixed(2);
+                cell5.textContent = allFactorInputs[i].marginalRevenue.toFixed(2);
+                cell6.textContent = allFactorInputs[i].marginalProfit.toFixed(2);
+
+                row.append(cell1, cell2, cell3, cell4, cell5, cell6);
+                tableBody.append(row);
+            }
+        }
+
+        // Function to display costs & revenue graph using Plotly
+        function showGraph() {
+            let cumulativeMarginalCosts = /*[[${cumulativeMarginalCosts}]]*/ {};
+            let cumulativeMarginalRevenue = /*[[${cumulativeMarginalRevenue}]]*/ {};
+
+            if (Object.keys(cumulativeMarginalCosts).length > 0 && Object.keys(cumulativeMarginalRevenue).length > 0) {
+                let numberOfInputs = Object.keys(cumulativeMarginalCosts);
+                let costs = Object.values(cumulativeMarginalCosts);
+                let revenue = Object.values(cumulativeMarginalRevenue);
+
+                var line1 = { x: numberOfInputs, y: costs, type: 'scatter', name: 'Costs' };
+                var line2 = { x: numberOfInputs, y: revenue, type: 'scatter', name: 'Revenue' };
+                var plotting = [line1, line2];
+
+                var layout = {
+                    title: "Costs & Revenue",
+                    xaxis: {title: "Inputs"},
+                    yaxis: {title: "Cost/Revenue"},
+                    dragmode: false,
+                    zoom: false,
+                    paper_bgcolor: "transparent",
+                    plot_bgcolor: "transparent",
+                    autosize: true
+                };
+
+                Plotly.newPlot("graphContainer", plotting, layout, {displayModeBar: false, responsive: true});
+            }
+        }
+
+        // Call functions to display all dynamic data
+        window.onload = showWindowsAlert;
+        showCostOfProductionInformation();
+        showTable();
+        showGraph();
+        showOptimalFactorInput();
+    </script>
+</body>
+</html>

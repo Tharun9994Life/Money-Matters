@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="/css/news.css" />
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav id="dashboardNavbar">
+        <a th:href="@{/news}">Economic News</a>
+        <a th:href="@{/figures-economic}">Economic Figures</a>
+        <a th:href="@{/exchange-rate-economic}">Exchange Rates</a>
+        <a th:href="@{/rate-the-economy}">Rate The Economy</a>
+        <a th:href="@{/budget-tracker}">Budget Tracker</a>
+        <a th:href="@{/investor}">Investor Centre</a>
+        <a th:href="@{/cost-of-production}">Cost Of Production</a>
+        <a th:href="@{/user-dashboard}">DashBoard</a>
+    </nav>
+
+    <div id="all">
+        <h1>Economic News</h1>
+
+        <!-- Form to filter and sort news articles -->
+        <form id="sort" action="/news" method="post">
+            <label>Select News Outlets:</label>
+            <br>
+            <input type="hidden" name="formName" value="filterNews">
+
+            <!-- Each checkbox represents a news source. Checked if previously selected -->
+            <label>BBC News - Centrist</label>
+            <input type="checkbox" name="newsSource" th:checked="${selectedSources != null and selectedSources.contains(0)}" value=0>
+            <br>
+
+            <label>The Telegraph - Right</label>
+            <input type="checkbox" name="newsSource" th:checked="${selectedSources != null and selectedSources.contains(1)}" value=1>
+            <br>
+
+            <label>The Economist - Centrist</label>
+            <input type="checkbox" name="newsSource" th:checked="${selectedSources != null and selectedSources.contains(2)}" value=2>
+            <br>
+
+            <label>The Independent - Left</label>
+            <input type="checkbox" name="newsSource" th:checked="${selectedSources != null and selectedSources.contains(3)}" value=3>
+            <br>
+
+            <label>CNBC - Centrist</label>
+            <input type="checkbox" name="newsSource" th:checked="${selectedSources != null and selectedSources.contains(4)}" value=4>
+            <br>
+
+            <!-- Dropdown to sort articles -->
+            <label>Sort Articles By:</label>
+            <select id="sort" name="sort">
+                <option value="date (latest)" th:selected="${selectedSort == 'date (latest)'}">Date (Latest)</option>
+                <option value="date (earliest)" th:selected="${selectedSort == 'date (earliest)'}">Date (Earliest)</option>
+                <option value="title (a-z)" th:selected="${selectedSort == 'title (a-z)'}">Title (A - Z)</option>
+                <option value="title (z-a)" th:selected="${selectedSort == 'title (z-a)'}">Title (Z - A)</option>
+            </select>
+
+            <br>
+            <input type="submit" value="Sort">
+        </form>
+
+        <!-- Search bar for client-side filtering -->
+        <div id="newsSearch">
+            <label>Search News Article:</label>
+            <input type="text" id="searchBar" placeholder="Type to search...">
+        </div>
+
+        <!-- Container for dynamically displaying news articles -->
+        <div id="news"></div>
+    </div>
+
+    <script th:inline="javascript">
+        const news = /*[[${economicNews}]]*/ [];
+        const newsDiv = document.getElementById("news");
+
+        // Function to display news articles
+        function showNews(news) { 
+            for (let i = 0; i < news.length; i++) {
+                const newsContainer = document.createElement("div");
+                newsContainer.id = news[i].EconomicNewsID;
+                newsContainer.className = "newsContainer";
+
+                let title = document.createElement("span");
+                title.innerText = news[i].title;
+                title.id = news[i].EconomicNewsID + "title";
+                title.className = "title";
+                
+                let description = document.createElement("span");
+                description.innerText = news[i].description;
+                description.id = news[i].EconomicNewsID + "-description";
+                description.className = "description";
+                
+                let source = document.createElement("span");
+                source.innerText = news[i].source;
+                source.id = news[i].EconomicNewsID + "-source";
+                source.className = "source";
+
+                let pubDate = document.createElement("span");
+                pubDate.innerText = news[i].pubDate;
+                pubDate.id = news[i].EconomicNewsID + "-pubDate";
+                pubDate.className = "pubDate";
+
+                let link = document.createElement("a");
+                link.href = news[i].link;
+                link.innerText = news[i].link;
+                link.id = news[i].EconomicNewsID + "-link";
+                link.className = "link";
+
+                let image = null;
+                if (news[i].image != null) {
+                    image = document.createElement("img");
+                    image.src = news[i].image;
+                    image.width = 240;
+                    image.height = 135;
+                    image.id = news[i].EconomicNewsID + "-image";
+                    image.className = "image";
+                }
+
+                // Hidden input for form submission if summarisation is used
+                let formName = document.createElement("input");
+                formName.type = "hidden";
+                formName.name = "formName";
+                formName.value = "summarise"
+
+                // Summarise button
+                let summaryButtonDiv = document.createElement("div");
+                summaryButtonDiv.id = "summaryButtonDiv";
+
+                let summaryButton = document.createElement("button");
+                summaryButton.innerText = "Summarise Article";
+                summaryButton.id = news[i].EconomicNewsID;
+                summaryButton.className = "summaryButton";
+                summaryButton.addEventListener("click", function() {
+                    event.preventDefault();
+                    generatingSummary(this);
+                });
+                
+                summaryButtonDiv.appendChild(summaryButton);
+
+                // Append all elements to news container
+                newsContainer.append(formName);
+                newsContainer.append(title);
+                newsContainer.append(document.createElement("br"));
+                newsContainer.append(description);
+                newsContainer.append(document.createElement("br"));
+                newsContainer.append(source);
+                newsContainer.append(document.createElement("br"));
+                newsContainer.append(pubDate);
+                newsContainer.append(document.createElement("br"));
+                newsContainer.append(link);
+                newsContainer.append(document.createElement("br"));
+                if (image != null) {
+                    newsContainer.append(image);
+                    newsContainer.append(document.createElement("br"));
+                }
+                newsContainer.append(summaryButtonDiv);
+                newsContainer.append(document.createElement("br"));
+                newsContainer.append(document.createElement("br"));
+                newsDiv.append(newsContainer);
+            }
+        }
+
+        // Helper to get the parent div of a button
+        function getDivId(button) {
+            return button.closest(".newsContainer").id;
+        }
+
+        // Function to generate AI summary of an article
+        function generatingSummary(button) {
+            const currentDiv = document.getElementById(getDivId(button));
+            const articleLink = currentDiv.querySelector("a").href;
+            const aiSummary = document.createElement("p");
+
+            button.innerText = "Generating Response...";
+
+            fetch("/news", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({formName: "summarise", link: articleLink}) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                aiSummary.textContent = JSON.parse(data.aiReply);
+                button.remove();
+                currentDiv.append(aiSummary);
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        // Client-side search/filter function
+        function searchBar() {
+            const searchBar = document.getElementById("searchBar");
+
+            searchBar.addEventListener("input", function() {
+                const query = this.value.toLowerCase();
+                newsDiv.innerHTML = "";
+
+                if (query) {
+                    const matches = news.filter(oneNews => oneNews.title.toLowerCase().includes(query));
+                    if (matches) showNews(matches);
+                }
+
+                // Show all articles if search is cleared
+                if (this.value === "") {
+                    showNews(news);
+                }
+            });
+        }
+
+        // Call functions to display all dynamic data
+        showNews(news);
+        searchBar();
+    </script>
+</body>
+</html>

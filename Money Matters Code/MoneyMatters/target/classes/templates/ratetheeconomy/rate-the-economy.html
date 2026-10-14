@@ -1,0 +1,184 @@
+<!-- https://plotly.com/javascript/pie-charts/ -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="stylesheet" href="/css/rate-the-economy.css"/>    
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <div id="all">
+        <h1>Rate The Economy</h1>
+
+        <!-- Navigation bar -->
+        <nav id="dashboardNavbar">
+            <a th:href="@{/news}">Economic News</a>
+            <a th:href="@{/figures-economic}">Economic Figures</a>
+            <a th:href="@{/exchange-rate-economic}">Exchange Rates</a>
+            <a th:href="@{/rate-the-economy}">Rate The Economy</a>
+            <a th:href="@{/budget-tracker}">Budget Tracker</a>
+            <a th:href="@{/investor}">Investor Centre</a>
+            <a th:href="@{/cost-of-production}">Cost Of Production</a>
+            <a th:href="@{/user-dashboard}">DashBoard</a>
+        </nav>
+
+        <!-- Form for rating the economy -->
+        <div id="rateTheEconomyDiv">
+            <form id="rateTheEconomyForm" action="/rate-the-economy" method="post"></form>
+        </div>
+
+        <!-- Display user's latest review -->
+        <h2>Your Review</h2>
+        <div id="latestConsumerOpinion"></div>
+
+        <!-- Form to select past review dates -->
+        <h2>See Other Reviews</h2>
+        <div id="chooseDateDiv">
+            <form id="chooseDateForm" action="/rate-the-economy" method="post">
+                <input type="hidden" name="formName" value="chooseDateForm">
+                <label>Choose a Date:</label>
+                <select id="selectedDate" name="selectedDate">
+                    <option th:each="entry : ${avaliableDates}"
+                            th:value="${entry.value}"
+                            th:text="${entry.key}"></option>
+                </select>
+                <input type="submit">
+            </form>
+        </div>
+
+        <!-- Container for all user opinions pie charts -->
+        <div id="allUserOpinions"></div>
+        <!-- Display average consumer opinion -->
+        <div id="averageConsumerOpinion"></div>
+    </div>
+
+    <script th:inline="javascript">
+        // Dynamically build the "Rate The Economy" form
+        function loadRateTheEconomyForm() {
+            const currentForm = document.getElementById("rateTheEconomyForm");
+            const allQuestionsAndAnswerPairs = /*[[${allQuestionsAndAnswerPairs}]]*/ [];
+                            
+            // Hidden input for form name
+            const formName = document.createElement("input");
+            formName.type = "hidden";
+            formName.name = "formName";
+            formName.value = "rateTheEconomyForm";
+            currentForm.append(formName);
+
+            // Loop through all questions
+            for (let i = 0; i < allQuestionsAndAnswerPairs.length; i++) {
+                const questionLabel = document.createElement("label");
+                questionLabel.className = "question";
+                questionLabel.innerText = "Question " + (i + 1) + ": "  + allQuestionsAndAnswerPairs[i].question + " ";
+                currentForm.appendChild(questionLabel);
+
+                const answers = allQuestionsAndAnswerPairs[i].answers;
+                
+                let questionNumber = 1;
+                // Loop through all answer options for the question
+                for (const [key, value] of Object.entries(answers)) {
+                    const answerRadio = document.createElement("input");
+                    answerRadio.type = "radio";
+                    answerRadio.name = "answer" + (i+1);
+                    answerRadio.value = key;
+                    answerRadio.required = true;
+
+                    const answerLabel = document.createElement("label");
+                    answerLabel.className = "options";
+
+                    const answerSpan = document.createElement("span");
+                    answerSpan.innerText = (questionNumber) + ") "  + key;
+                    
+                    answerLabel.appendChild(answerRadio);
+                    answerLabel.appendChild(answerSpan);
+                    currentForm.appendChild(answerLabel);
+                    questionNumber++;
+                }
+
+                currentForm.appendChild(document.createElement("br"));
+            }
+
+            // Add submit button at the end
+            const submitButton = document.createElement("button");
+            submitButton.type = "submit";
+            submitButton.innerText = "Submit";            
+            currentForm.appendChild(submitButton);
+        }   
+
+        // Generate pie charts for all user opinions
+        function loadPieCharts() {
+            let allUserOpinions = /*[[${allUserOpinions}]]*/ {};
+            let allUserOpinionsDiv = document.getElementById("allUserOpinions");
+
+            for (let question in allUserOpinions) {
+                let answersFrequencyPairs = allUserOpinions[question]; 
+                let answers = Object.keys(answersFrequencyPairs);
+                let frequencies = Object.values(answersFrequencyPairs);
+            
+                const data = [{
+                    values: frequencies,
+                    labels: answers,
+                    type: "pie"
+                }];
+
+                const layout = {
+                    title: {text: question, font: {size: 10}},
+                    height: 400,
+                    width: 500,
+                    dragmode: false,
+                    zoom: false,
+                    paper_bgcolor: "transparent",
+                    plot_bgcolor: "transparent",
+                };
+
+                let chartDiv = document.createElement("div");
+                chartDiv.className = "pieChart";
+                Plotly.newPlot(chartDiv, data, layout, {displayModeBar: false, responsive: true});
+                allUserOpinionsDiv.appendChild(chartDiv);
+            }
+
+            // Display average consumer opinion
+            const averageConsumerOpinion = /*[[${averageConsumerOpinion}]]*/ "";
+            if (averageConsumerOpinion != null && averageConsumerOpinion !== "") {                
+                const averageConsumerOpinionDiv = document.getElementById("averageConsumerOpinion");
+                const averageConsumerOpinionSpan = document.createElement("span");
+                averageConsumerOpinionSpan.innerText = "Average Consumers' Happiness Of The Economy: " + averageConsumerOpinion + "%";
+                averageConsumerOpinionDiv.append(averageConsumerOpinionSpan);
+                averageConsumerOpinionDiv.append(document.createElement("br"));
+            }
+        }
+
+        // Show the user's latest review
+        function loadLatestConsumerOpinion() {
+            const latestConsumerOpinionDiv = document.getElementById("latestConsumerOpinion");
+
+            const latestConsumerOpinionDateSpan = document.createElement("span");
+            const latestConsumerOpinionDate = /*[[${consumerOpinionDate}]]*/ "";
+
+            if (latestConsumerOpinionDate == null) {
+                latestConsumerOpinionDateSpan.innerText = "Complete The Form To See Your Review";
+            } else {
+                latestConsumerOpinionDateSpan.innerText = "Latest Form Submission: " + latestConsumerOpinionDate;
+            }
+            latestConsumerOpinionDiv.append(latestConsumerOpinionDateSpan);
+            latestConsumerOpinionDiv.append(document.createElement("br"));
+
+            const latestConsumerOpinionSpan = document.createElement("span");
+            const latestConsumerOpinion = /*[[${consumerOpinion}]]*/ "";
+            latestConsumerOpinionSpan.innerText = "Your Happiness Of The Economy: " + latestConsumerOpinion + "%";
+            
+            if (latestConsumerOpinion != null) {
+                latestConsumerOpinionDiv.append(latestConsumerOpinionSpan);
+            }
+            latestConsumerOpinionDiv.append(document.createElement("br"));
+        }
+
+        loadRateTheEconomyForm();
+        loadLatestConsumerOpinion();
+        loadPieCharts();
+    </script>
+</body>
+</html>

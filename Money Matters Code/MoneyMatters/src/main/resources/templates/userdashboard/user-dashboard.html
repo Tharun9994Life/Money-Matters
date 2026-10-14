@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="/css/user-dashboard.css" />
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <div id="all">
+        <h1>User Dashboard</h1>
+
+        <!-- Navigation bar -->
+        <nav id="dashboardNavbar">
+            <a th:href="@{/news}">Economic News</a>
+            <a th:href="@{/figures-economic}">Economic Figures</a>
+            <a th:href="@{/exchange-rate-economic}">Exchange Rates</a>
+            <a th:href="@{/rate-the-economy}">Rate The Economy</a>
+            <a th:href="@{/budget-tracker}">Budget Tracker</a>
+            <a th:href="@{/investor}">Investor Centre</a>
+            <a th:href="@{/cost-of-production}">Cost Of Production</a>
+            <a th:href="@{/start}">Log Out</a>
+        </nav>
+
+        <!-- AI Bot Section -->
+        <div id="aiFormContainer">
+            <h2>Ask A Question</h2>
+            <div id="aiReplies"></div>
+            <form id="askAIBot" name="askAIBot">
+                <input type="text" id="userPrompt" name="userPrompt" placeholder="Ask A Question">
+                <button type="submit" onclick="generatingAnswer()">Ask</button>
+            </form>
+            <p id="generateAnswer"></p>
+        </div>
+
+        <!-- Glossary Section -->
+        <div id="glossary">
+            <h2>Glossary</h2>
+            <form id="glossarySearchInput" name="glossarySearch" action="/user-dashboard" method="post">
+                <input type="hidden" name="formName" value="glossarySearch">
+                <input type="text" id="glossarySearchInput" name="glossarySearchInput">
+                <input type="submit" value="Search">
+                <span th:text="${userWantedWord}"></span>
+            </form>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        // Populate glossary with word-definition pairs
+        function generateGlossary() {
+            const wordsDefinitionsPairs = /*[[${wordsDefinitionsPairs}]]*/ {};
+            const glossaryDiv = document.getElementById("glossary");
+            const words = Object.keys(wordsDefinitionsPairs);
+            const definitions = Object.values(wordsDefinitionsPairs);
+
+            for (let i = 0; i < words.length; i++) {
+                const tempDiv = document.createElement("div");
+                const wordSpan = document.createElement("span");
+                const definitionSpan = document.createElement("span");
+                
+                wordSpan.innerText = words[i] + ": ";
+                definitionSpan.innerText = definitions[i];
+                tempDiv.append(wordSpan, definitionSpan);
+                glossaryDiv.append(tempDiv);
+            }
+        }
+
+        // Send user question to backend and display AI response
+        function generatingAnswer() {
+            const formName = "askAIBot";
+
+            const userQuestion = document.createElement("p");
+            userQuestion.classList.add("user-message");
+            userQuestion.innerText = document.getElementById("userPrompt").value;
+
+            const aiReply = document.createElement("p");
+            aiReply.classList.add("ai-message");
+
+            const aiReplies = document.getElementById("aiReplies");
+
+            document.getElementById("generateAnswer").innerText = "Generating Response...";
+            
+            // Event listener for form submission
+            document.getElementById("askAIBot").addEventListener("submit", function(e) {
+                e.preventDefault();
+                const userPrompt = document.getElementById("userPrompt").value;
+                
+                // Fetch request to backend endpoint
+                fetch("/user-dashboard", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({formName: formName, userPrompt: userPrompt})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    aiReply.textContent = JSON.parse(data.aiReply); // Parse AI reply
+                    aiReplies.append(userQuestion);
+                    aiReplies.append(aiReply);
+                    document.getElementById("generateAnswer").innerText = ""; 
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        }
+
+        // Display any alerts from backend
+        function showWindowsAlert() {
+            let windowsAlert = /*[[${windowsAlert}]]*/ false;
+            let windowsAlertMessage = /*[[${windowsAlertMessage}]]*/ "";
+
+            if (windowsAlert === true) {
+                window.alert(windowsAlertMessage);
+            }
+        }
+
+        // Run on page load
+        window.onload = showWindowsAlert;
+        generateGlossary();
+    </script>
+</body>
+</html>

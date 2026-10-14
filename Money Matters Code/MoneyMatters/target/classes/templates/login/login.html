@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="/css/login.css"/>
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <h1>Login</h1>
+
+    <!-- Login form -->
+    <form id="login-inputs" action="/login" method="post">
+
+        <!-- Email input field -->
+        <div class="inputWrapper">
+            <label>Email:</label>
+            <input type="text" id="email" name="email" placeholder="johndoe123@gmail.com" required>
+        </div>
+
+        <!-- Password input field with show/hide toggle -->
+        <div class="inputWrapper" id="passwordInput">
+            <label>Password:</label>
+            <div class="passwordField">
+                <input type="password" id="password" name="password" placeholder="********" required>
+                <!-- Eye icon to toggle password visibility -->
+                <img id="showPasswordImage" src="/images/view.png">
+            </div>
+        </div>
+
+        <!-- Login and back buttons -->
+        <div id="loginButtons">
+            <button type="submit">Login</button>
+            <a id="backToHomeButton" th:href="@{/start}">Back To Home</a>
+        </div>
+    </form>
+
+    <script th:inline="javascript">
+        // Toggle the password visibility when the eye icon is clicked
+        function showPassword() {
+            const passwordInput = document.getElementById("password");
+            const buttonImage = document.getElementById("showPasswordImage");
+            const isShow = passwordInput.type === "text";
+
+            if (isShow) {
+                // Hide password
+                passwordInput.type = "password";
+                buttonImage.src = "/images/view.png";
+            } 
+            
+            else {
+                // Show password
+                passwordInput.type = "text";
+                buttonImage.src = "/images/hide.png";
+            }
+        }
+
+        // Show alert
+        function showWindowsAlert() {
+            let windowsAlert = /*[[${windowsAlert}]]*/ false;
+            let windowsAlertMessage = /*[[${windowsAlertMessage}]]*/ "";
+
+            if (windowsAlert === true) {
+                window.alert(windowsAlertMessage);
+            }
+        }
+
+        // Call functions to display dynamic data
+        window.onload = showWindowsAlert;
+
+        // Toggling password
+        document.getElementById("showPasswordImage").addEventListener("click", showPassword);
+    </script>
+</body>
+</html>

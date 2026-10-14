@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="css\start.css">
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <div id="centreDiv">
+
+        <!-- Title -->
+        <div id="createAnAccount">
+            <h1>MoneyMatters</h1>
+            <h4>A Tharun Industries Production</h4>
+        </div>
+
+        <!-- Buttons for Login and Sign Up -->
+        <div id="registrationButtons">
+
+            <!-- Login button -->
+            <a th:href="@{/login}">
+                <button id="login-button">Login</button>
+            </a>
+
+            <br>
+
+            <!-- Sign Up button -->
+            <a th:href="@{/signup}">
+                <button id="signup-button">Sign Up</button>
+            </a>
+
+        </div>
+    </div>
+</body>
+</html>

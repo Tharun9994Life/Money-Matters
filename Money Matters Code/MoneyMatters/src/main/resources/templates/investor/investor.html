@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="stylesheet" href="/css/investor.css"/>
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <div id="all">
+        <h1>Investor Centre</h1>
+
+        <!-- Navigation bar -->
+        <nav id="dashboardNavbar">
+            <a th:href="@{/news}">Economic News</a>
+            <a th:href="@{/figures-economic}">Economic Figures</a>
+            <a th:href="@{/exchange-rate-economic}">Exchange Rates</a>
+            <a th:href="@{/rate-the-economy}">Rate The Economy</a>
+            <a th:href="@{/budget-tracker}">Budget Tracker</a>
+            <a th:href="@{/investor}">Investor Centre</a>
+            <a th:href="@{/cost-of-production}">Cost Of Production</a>
+            <a th:href="@{/user-dashboard}">DashBoard</a>
+        </nav>
+
+        <!-- User budget display -->
+        <div id="userData"></div>
+
+        <!-- Form to select stock and time period -->
+        <div id="selectCompanyDiv">
+            <form id="selectCompany" action="/investor" method="post">
+                <input type="hidden" name="formName" value="selectCompany">
+                <label>Choose a Stock: </label>
+                <select id="tickerSymbol" name="tickerSymbol">
+                    <option th:each="entry : ${allTickerInfo}"
+                            th:value="${entry.value}"
+                            th:text="${entry.key}"
+                            th:selected="${selectedTickerSymbol == entry.value}">
+                    </option>
+                </select>
+
+                <label>Choose a Time Period: </label>
+                <select id="timeSpan" name="timeSpan">
+                    <option th:each="entry : ${timePeriods}"
+                            th:value="${entry.value}"
+                            th:text="${entry.key}"
+                            th:selected="${selectedTimeSpan == entry.value}">
+                    </option>
+                </select>
+
+                <input type="submit">
+            </form>
+        </div>
+
+        <!-- Graph container for stock price and volume -->
+        <div id="graphContainer" th:class="${graphContainerDiv == 'graphContainerDiv' ? 'show' : 'hide'}"></div>
+
+        <!-- Company details display -->
+        <div id="companyDetails" th:class="${companyDetailsDiv == 'companyDetailsDiv' ? 'show' : 'hide'}"></div>
+
+        <!-- Purchase stock form -->
+        <div id="purchaseStockDiv" th:class="${purchaseStockDiv == 'purchaseStockDiv' ? 'show' : 'hide'}">
+            <h2 id=purchaseStockHeading></h2>
+            <form id="purchaseStock" action="/investor" method="post">
+                <input type="hidden" name="formName" value="purchaseStock">
+            </form>
+        </div>
+
+        <!-- Sell stock form -->
+        <div id="sellStockDiv" th:class="${sellStockDiv == 'sellStockDiv' ? 'show' : 'hide'}">
+            <h2 id=sellStockHeading></h2>
+            <form id="sellStock" action="/investor" method="post">
+                <input type="hidden" name="formName" value="sellStock">
+            </form>
+        </div>
+
+        <!-- Display of owned stocks -->
+        <div id="ownedStocksDiv">
+            <h2>Owned Stocks</h2>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        function showUserData() {
+            const stockBudget = /*[[${stockBudget}]]*/ 0;
+            const userDataDiv = document.getElementById("userData");
+
+            const labelSpan = document.createElement("span");
+            labelSpan.innerText = "Budget Available For Stocks: £" + stockBudget.toFixed(2);
+            userDataDiv.append(labelSpan);
+        }
+
+        // Display user's owned stocks
+        function showOwnedStock() {
+            const ownedStocksDiv = document.getElementById("ownedStocksDiv"); 
+
+            const allStockNames = /*[[${allStockNames}]]*/ [];
+            const allNetQuantities = /*[[${allNetQuantities}]]*/ [];
+            const allTotalAskPrices = /*[[${allTotalAskPrices}]]*/ [];
+            const allCurrentAskPrices = /*[[${allCurrentAskPrices}]]*/ [];
+            const allAverageAskPrices = /*[[${allAverageAskPrices}]]*/ [];
+            const allPotentialProfit = /*[[${allPotentialProfit}]]*/ [];
+
+            for (let i = 0; i < allStockNames.length; i++) {
+                const currentStockDiv = document.createElement("div");
+                currentStockDiv.className = "currentStock";
+
+                const stockNameSpan = document.createElement("span");
+                stockNameSpan.innerText = "Stock: " + allStockNames[i]; 
+
+                const quantitySpan = document.createElement("span");
+                quantitySpan.innerText = "Quantity: " + allNetQuantities[i]; 
+
+                const totalAskPricesSpan = document.createElement("span");
+                totalAskPricesSpan.innerText = "Bought Stock Price: £" + allTotalAskPrices[i].toFixed(2); 
+
+                const averageAskPricesSpan = document.createElement("span");
+                averageAskPricesSpan.innerText = "Average Bought Stock Price: £" + allAverageAskPrices[i].toFixed(2); 
+
+                const currentAskPricesSpan = document.createElement("span");
+                currentAskPricesSpan.innerText = "Current Stock Price: £" + allCurrentAskPrices[i].toFixed(2); 
+
+                const potentialProfitFor1StockSpan = document.createElement("span");
+                const potentialTotalProfitSpan = document.createElement("span");
+
+                if (allPotentialProfit[i] < 0) {
+                    potentialProfitFor1StockSpan.innerText = "Potential Loss If One Stock Sold: £" + (-1 * allPotentialProfit[i]).toFixed(2); 
+                    potentialTotalProfitSpan.innerText = "Potential Total Loss: £" + (-1 * allPotentialProfit[i] * allNetQuantities[i]).toFixed(2); 
+                } 
+                
+                else {
+                    potentialProfitFor1StockSpan.innerText = "Potential Profit If One Stock Sold: £" + allPotentialProfit[i].toFixed(2);
+                    potentialTotalProfitSpan.innerText = "Potential Total Profit: £" + (allPotentialProfit[i] * allNetQuantities[i]).toFixed(2); 
+                }
+
+                currentStockDiv.append(stockNameSpan);
+                currentStockDiv.append(quantitySpan);
+                currentStockDiv.append(totalAskPricesSpan);
+                currentStockDiv.append(averageAskPricesSpan);
+                currentStockDiv.append(currentAskPricesSpan);
+                currentStockDiv.append(potentialProfitFor1StockSpan);
+                currentStockDiv.append(potentialTotalProfitSpan);
+                ownedStocksDiv.append(currentStockDiv);
+            }
+        }
+
+        // Display selected company details
+        function showCompanyDetails() {
+            let companyRecord = /*[[${companyInformation}]]*/ {};
+            let askPrice = /*[[${askPrice}]]*/ "";
+
+            let companyDetailsDiv = document.getElementById("companyDetails");
+
+            let shortName = companyRecord["shortName"];
+            let sector = companyRecord["sector"];
+            let industry = companyRecord["industry"];
+            let fullTimeEmployees = companyRecord["fullTimeEmployees"];
+            let country = companyRecord["country"];
+            let website = companyRecord["website"];
+
+            let shortNameSpan = document.createElement("span");
+            shortNameSpan.innerText = "Company: " + shortName;
+
+            let sectorSpan = document.createElement("span");
+            sectorSpan.innerText = "Sector: " + sector;
+
+            let industrySpan = document.createElement("span");
+            industrySpan.innerText = "Industry: " + industry;
+
+            let fullTimeEmployeesSpan = document.createElement("span");
+            fullTimeEmployeesSpan.innerText = "Full Time Employees: " + fullTimeEmployees;
+
+            let countrySpan = document.createElement("span");
+            countrySpan.innerText = "Country: " + country;
+
+            let websiteSpan = document.createElement("span");
+            let websiteLink = document.createElement("a");
+            websiteLink.href = website;
+            websiteLink.innerText = website;
+            websiteSpan.innerText = "Website: ";
+
+            let askPriceSpan = document.createElement("span");
+            askPriceSpan.innerText = "Ask Price: £" + askPrice.toFixed(2);
+
+            let SMA10DayTrend = /*[[${SMA10DayTrend}]]*/ "";
+            let SMA10DayGradient = /*[[${SMA10DayGradient}]]*/ "";
+
+            let SMA50DayTrend = /*[[${SMA50DayTrend}]]*/ "";
+            let SMA50DayGradient = /*[[${SMA50DayGradient}]]*/ "";
+
+            let SMA100DayTrend = /*[[${SMA100DayTrend}]]*/ "";
+            let SMA100DayGradient = /*[[${SMA100DayGradient}]]*/ "";
+
+            let SMA10DayTrendSpan = document.createElement("span");
+            SMA10DayTrendSpan.innerText = "10-Day SMA Trend: " + SMA10DayTrend;
+            
+            let SMA10DayGradientSpan = document.createElement("span");
+            SMA10DayGradientSpan.innerText = "10-Day SMA Gradient: " + SMA10DayGradient.toFixed(2);
+
+            let SMA50DayTrendSpan = document.createElement("span");
+            SMA50DayTrendSpan.innerText = "50-Day SMA Trend: " + SMA50DayTrend;
+            
+            let SMA50DayGradientSpan = document.createElement("span");
+            SMA50DayGradientSpan.innerText = "50-Day SMA Gradient: " + SMA50DayGradient.toFixed(2);
+           
+            let SMA100DayTrendSpan = document.createElement("span");
+            SMA100DayTrendSpan.innerText = "100-Day SMA Trend: " + SMA100DayTrend;
+            
+            let SMA100DayGradientSpan = document.createElement("span");
+            SMA100DayGradientSpan.innerText = "100-Day SMA Gradient: " + SMA100DayGradient.toFixed(2);
+
+            companyDetailsDiv.append(shortNameSpan);
+            companyDetailsDiv.append(sectorSpan);
+            companyDetailsDiv.append(industrySpan);
+            companyDetailsDiv.append(fullTimeEmployeesSpan);
+            companyDetailsDiv.append(countrySpan);
+            websiteSpan.appendChild(websiteLink);
+            companyDetailsDiv.append(websiteSpan);
+            companyDetailsDiv.append(askPriceSpan);
+
+            companyDetailsDiv.append(document.createElement("br"));
+
+            companyDetailsDiv.append(SMA10DayTrendSpan);
+            companyDetailsDiv.append(SMA10DayGradientSpan);
+            
+            companyDetailsDiv.append(SMA50DayTrendSpan);
+            companyDetailsDiv.append(SMA50DayGradientSpan);
+            
+            companyDetailsDiv.append(SMA100DayTrendSpan);
+            companyDetailsDiv.append(SMA100DayGradientSpan);
+        }
+
+        // Show purchase stock form
+        function showPurchaseStock() {
+            const stockBudget = /*[[${stockBudget}]]*/ 0;
+
+            const askPrice = /*[[${askPrice}]]*/ "";
+            const companyName = /*[[${companyName}]]*/ "";
+
+            let maxBuy = Math.floor(stockBudget / askPrice);
+
+            const purchaseStockForm = document.getElementById("purchaseStock");
+            const purchaseStocksHeading = document.getElementById("purchaseStockHeading");
+            purchaseStocksHeading.innerText = "Purchase Stocks";
+
+            const askPriceLabel = document.createElement("label");            
+            askPriceLabel.innerText = "Buy Stock From " + companyName + ": £" + askPrice.toFixed(2);
+            purchaseStockForm.append(askPriceLabel);
+
+            const quantityLabel = document.createElement("label");
+            quantityLabel.innerText = "Quantity: ";
+            purchaseStockForm.append(quantityLabel);
+            
+            const quantityBuy = document.createElement("input");
+            quantityBuy.id = "quantityBuy";
+            quantityBuy.name = "quantityBuy";
+            quantityBuy.type = "number";
+            quantityBuy.step = "1"; 
+            quantityBuy.max = maxBuy;
+            quantityBuy.min = 1; 
+            purchaseStockForm.append(quantityBuy);
+
+            let submitInput = document.createElement("input");
+            submitInput.type = "submit";
+            purchaseStockForm.append(submitInput);
+        }
+
+        // Show sell stock form
+        function showSellStock() {
+            const askPrice = /*[[${askPrice}]]*/ "";
+            const companyName = /*[[${companyName}]]*/ "";
+
+            const allStockNames = /*[[${allStockNames}]]*/ [];
+            const allNetQuantities = /*[[${allNetQuantities}]]*/ [];
+            let maxSell = 0;
+
+            for (let i = 0; i < allStockNames.length; i++) {
+                if (allStockNames[i] === companyName) {
+                    maxSell = allNetQuantities[i];
+                    break;
+                }
+            }
+
+            const sellStockForm = document.getElementById("sellStock");
+            const sellStocksHeading = document.getElementById("sellStockHeading");
+            sellStocksHeading.innerText = "Sell Stocks";
+
+            const askPriceLabel = document.createElement("label");            
+            askPriceLabel.innerText = "Sell Stock From " + companyName + ": £" + askPrice.toFixed(2);
+            sellStockForm.append(askPriceLabel);
+
+            const quantityLabel = document.createElement("label");
+            quantityLabel.innerText = "Quantity: ";
+            sellStockForm.append(quantityLabel);
+            
+            const quantitySell = document.createElement("input");
+            quantitySell.id = "quantitySell";
+            quantitySell.name = "quantitySell";
+            quantitySell.type = "number";
+            quantitySell.step = "1"; 
+            quantitySell.max = maxSell;
+            quantitySell.min = 1;
+            sellStockForm.append(quantitySell);
+
+            let submitInput = document.createElement("input");
+            submitInput.type = "submit";
+            sellStockForm.append(submitInput);
+        }
+
+        // Display stock price and volume chart
+        function showStockPriceAndVolumeGraph() {
+            const stockPriceComponents = /*[[${stockPriceComponents}]]*/ [[]];
+            const dates = stockPriceComponents[0];
+            const open = stockPriceComponents[1];
+            const high = stockPriceComponents[2];
+            const low = stockPriceComponents[3];
+            const close = stockPriceComponents[4];
+            const volume = stockPriceComponents[5];
+
+            const companyName = /*[[${companyName}]]*/ "";
+
+            const Line1 = {
+                x: dates,
+                open: open,
+                high: high,
+                low: low,
+                close: close,
+                type: "candlestick",
+                name: "Price",
+                yaxis: "y1"
+            };
+
+            const Bar1 = {
+                x: dates,
+                y: volume,
+                type: "bar",
+                name: "Volume",
+                yaxis: "y2",
+                marker: { color: "rgba(100, 100, 255, 0.5)" }
+            };
+
+            const plotting = [Line1, Bar1];
+
+            const layout = {
+                title: { text: companyName + "'s Stock Price and Volume" },
+                xaxis: { title: "Date", showgrid: false, tickangle: -45 },
+                yaxis: { title: "Volume", side: "right", overlaying: "y2", showgrid: false },
+                yaxis2: { title: "Price", side: "left", showgrid: true },
+                dragmode: false,
+                zoom: false,
+                paper_bgcolor: "transparent",
+                plot_bgcolor: "transparent"
+            };
+
+            Plotly.newPlot("graphContainer", plotting, layout, {displayModeBar: false, responsive: true});
+        }
+
+        showUserData();
+        showOwnedStock();
+        showStockPriceAndVolumeGraph();
+        showCompanyDetails();
+        showPurchaseStock();
+        showSellStock();
+    </script>
+</body>
+</html>

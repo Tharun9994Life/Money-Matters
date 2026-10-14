@@ -1,0 +1,13 @@
+CREATE TABLE Trades (
+    TradeID INT IDENTITY(1,1) PRIMARY KEY,
+    ConsumerID INT NULL,
+    ProducerID INT NULL,
+    StockID INT NOT NULL,
+    TradeDate DATE DEFAULT GETDATE() NOT NULL,
+    TradeType VARCHAR(4) NOT NULL,
+    AskPrice DECIMAL(10, 2) NOT NULL,
+    Quantity INT NOT NULL,
+    FOREIGN KEY (ConsumerID) REFERENCES Consumers(ConsumerID),
+    FOREIGN KEY (ProducerID) REFERENCES Producers(ProducerID),
+    FOREIGN KEY (StockID) REFERENCES Stocks(StockID)
+);

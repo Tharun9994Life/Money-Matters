@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="stylesheet" href="/css/budget-tracker.css"/>
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <div id="all">
+        <h1>Budget Tracker</h1>
+
+        <!-- Navigation bar -->
+        <nav id="dashboardNavbar">
+            <a th:href="@{/news}">Economic News</a>
+            <a th:href="@{/figures-economic}">Economic Figures</a>
+            <a th:href="@{/exchange-rate-economic}">Exchange Rates</a>
+            <a th:href="@{/rate-the-economy}">Rate The Economy</a>
+            <a th:href="@{/budget-tracker}">Budget Tracker</a>
+            <a th:href="@{/investor}">Investor Centre</a>
+            <a th:href="@{/cost-of-production}">Cost Of Production</a>
+            <a th:href="@{/user-dashboard}">DashBoard</a>
+        </nav>
+
+        <div>
+            <!-- Section to display current user budget data -->
+            <div id="userBudget">
+                <h2>Current Budget Data</h2>
+                <div id="userCurrentData"></div>
+            </div>
+
+            <!-- Form to update user's budget -->
+            <div id="updateBudget">
+                <h2>Update Budget Data</h2>
+                <form id="budget-inputs" action="/budget-tracker" method="post">
+                    <input type="hidden" name="formName" value="userBudget">
+
+                    <label>Enter Current Budget (£):</label>
+                    <input type="number" id="budgetSize" name="budgetSize" placeholder="100" step="0.01" required>
+                    <br>
+
+                    <label>Frequency of Budget Renewal:</label>
+                    <select name="frequencyOfRenewal" required>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                    <br>
+
+                    <input type="submit">
+                </form>
+            </div>
+
+            <!-- Form to add a purchased good -->
+            <div id="addGood">
+                <h2>Add Good</h2>
+                <form id="good-inputs" action="/budget-tracker" method="post">
+                    <input type="hidden" name="formName" value="userGoods">
+
+                    <label>Enter the name of the good you have purchased:</label>
+                    <input type="text" id="goodName" name="goodName" placeholder="Pepsi" required>
+                    <br>
+
+                    <label>Enter the price of the good you have purchased:</label>
+                    <input type="number" id="goodPrice" name="goodPrice" placeholder="1" step="0.01" required>
+                    <br>
+
+                    <label>Enter the quantity of the good you have purchased:</label>
+                    <input type="number" id="goodQuantity" name="goodQuantity" placeholder="1" step="1" required>
+                    <br>
+
+                    <input type="submit">
+                </form>
+            </div>
+
+            <!-- Table to display latest goods purchased -->
+            <div id="latestGoodsPurchased">
+                <h2>Goods Purchased</h2>
+
+                <!-- Form to filter purchases -->
+                <form id="filterBudget" action="/budget-tracker" method="post">
+                    <input type="hidden" name="formName" value="filterBudget">
+                    <select id="sort" name="sort" required>
+                        <option value="date (latest)" th:selected="${selectedSort == 'date (latest)'}">Date (Latest)</option>
+                        <option value="date (earliest)" th:selected="${selectedSort == 'date (earliest)'}">Date (Earliest)</option>
+                        <option value="most expensive" th:selected="${selectedSort == 'most expensive'}">Most To Least Expensive</option>
+                        <option value="least expensive" th:selected="${selectedSort == 'least expensive'}">Least To Most Expensive</option>
+                        <option value="most bought" th:selected="${selectedSort == 'most bought'}">Most To Least Bought</option>
+                        <option value="least bought" th:selected="${selectedSort == 'least bought'}">Least To Most Bought</option>
+                    </select>
+                    <input type="submit">
+                </form>
+
+                <!-- Table showing purchases -->
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Price (£)</th>
+                            <th>Quantity</th>
+                            <th>Total Price (£)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableContents"></tbody>
+                </table>
+            </div>
+
+            <!-- Section for highlighting risky purchases -->
+            <div id="outliers">
+                <h2>Risky Purchases</h2>
+            </div>
+
+            <!-- Containers for Plotly graphs -->
+            <div id="graphContainer1" style="width: 100%; height: 500px;"></div>
+            <div id="graphContainer2" style="width: 100%; height: 500px;"></div>
+        </div>
+    </div>
+
+    <script type="module" th:inline="javascript">
+        import {format} from "https://cdn.skypack.dev/date-fns";
+
+        // Reference to div where current user data will be displayed
+        let userCurrentDataDiv = document.getElementById("userCurrentData");
+
+        // Functions to display various user budget data
+        function showBudgetSize() {
+            let budgetSize = /*[[${budgetSize}]]*/ "";
+            let budgetSizeSpan = document.createElement("span");
+            budgetSizeSpan.innerText = "Budget Size: £" + budgetSize.toFixed(2);
+            userCurrentDataDiv.append(budgetSizeSpan);
+        }
+
+        function showCurrentBudget() {
+            let currentBudget = /*[[${currentBudget}]]*/ "";
+            let currentBudgetSpan = document.createElement("span");
+            currentBudgetSpan.innerText = "Current Budget: £" + currentBudget.toFixed(2);
+            userCurrentDataDiv.append(currentBudgetSpan);
+        }
+
+        function showSustainableSpending() {
+            let sustainableSpending = /*[[${sustainableSpending}]]*/ "";
+            let sustainableSpendingSpan = document.createElement("span");
+            sustainableSpendingSpan.innerText = "Sustainable Spending Per Day: £" + sustainableSpending.toFixed(2);
+            userCurrentDataDiv.append(sustainableSpendingSpan);
+        }
+
+        function showFrequencyOfBudgetRenewal() {
+            let frequencyOfBudgetRenewal = /*[[${frequencyOfBudgetRenewal}]]*/ "";
+            let frequencyOfBudgetRenewalSpan = document.createElement("span");
+            frequencyOfBudgetRenewalSpan.innerText = "Frequency Of Budget Renewal: " + frequencyOfBudgetRenewal;
+            userCurrentDataDiv.append(frequencyOfBudgetRenewalSpan);
+        }
+
+        function showTodaySpending() {
+            let todaySpending = /*[[${todaySpending}]]*/ "";
+            let todaySpendingSpan = document.createElement("span");
+            todaySpendingSpan.innerText = "Today's Spending: £" + parseInt(todaySpending).toFixed(2);
+            userCurrentDataDiv.append(todaySpendingSpan);
+        }
+
+        // Function to display risky purchases
+        function showOutliers() {
+            let outliers = /*[[${riskyPurchases}]]*/ [];
+            let outliersDiv = document.getElementById("outliers");
+
+            for (let i = 0; i < outliers.length; i++) {
+                let outlierSpan = document.createElement("span");
+                outlierSpan.innerText = outliers[i].goodName + " at £" + outliers[i].price.toFixed(2) + " is a risky purchase.";
+                outliersDiv.append(outlierSpan);
+                outliersDiv.appendChild(document.createElement("br"));
+            }
+        }
+
+        // Function to display future budget projections with Plotly
+        function showFutureBudget() {
+            let futureBudget = /*[[${futureBudget}]]*/ [];
+            futureBudget = JSON.parse(futureBudget);
+
+            let months = /*[[${months}]]*/ [];
+
+            let essentials = [];
+            let leisure = [];
+            let savings = [];
+            
+            for (let i = 0; i < futureBudget.length; i++) {
+                let yearData = futureBudget[i];
+                essentials.push(parseFloat(yearData[0]).toFixed(2));
+                leisure.push(parseFloat(yearData[1]).toFixed(2));
+                savings.push(parseFloat(yearData[2]).toFixed(2));
+            }
+
+            // Define traces for Plotly
+            var line1 = {x: months, y: essentials, type: "scatter", name: "Essentials"};
+            var line2 = {x: months, y: leisure, type: "scatter", name: "Leisure"};
+            var line3 = {x: months, y: savings, type: "scatter", name: "Savings"};
+
+            var plotting = [line1, line2, line3];
+            
+            var layout = {
+                title: "Future Budget",
+                xaxis: {title: "Months", type: "category"},
+                yaxis: {title: "Budget Components (£)"},
+                dragmode: false,
+                zoom: false,
+                paper_bgcolor: "transparent",
+                plot_bgcolor: "transparent"
+            };
+
+            Plotly.newPlot("graphContainer2", plotting, layout, {displayModeBar: false, responsive: true});
+        }
+
+        // Function to populate the latest goods purchased table
+        function showLatestGoodsPurchased() {
+            const consumerPurchases = /*[[${consumerPurchases}]]*/ [];
+            const tableContents = document.getElementById("tableContents");
+
+            for (let i = 0; i < consumerPurchases.length; i++) {
+                const row = document.createElement("tr");
+                const cell1 = document.createElement("td");
+                const cell2 = document.createElement("td");
+                const cell3 = document.createElement("td");
+                const cell4 = document.createElement("td");
+                const cell5 = document.createElement("td");
+
+                let purchaseDate = format(new Date(consumerPurchases[i].purchaseDate), "dd/MM/yyyy");
+                let goodName = consumerPurchases[i].goodName;
+                let goodPrice = consumerPurchases[i].goodPrice.toFixed(2);
+                let goodQuantity = consumerPurchases[i].goodQuantity;
+                let totalPrice = consumerPurchases[i].totalPrice.toFixed(2);
+                
+                cell1.textContent = purchaseDate;
+                cell2.textContent = goodName;
+                cell3.textContent = goodPrice;
+                cell4.textContent = goodQuantity;
+                cell5.textContent = totalPrice;
+                
+                row.append(cell1, cell2, cell3, cell4, cell5);
+                tableContents.append(row);
+            }
+        }
+
+        // Function to show weekly spending as a bar chart
+        function showWeeklySpending() {
+            const dateTotalPricePairs = /*[[${dateTotalPricePairs}]]*/ {};
+            const dates = Object.keys(dateTotalPricePairs);
+            const totalPrice = Object.values(dateTotalPricePairs);
+            
+            var bars = {x: dates, y: totalPrice, type: "bar"};
+            var plotting = [bars];
+
+            var layout = {
+                title: "This Week's Spendings",
+                xaxis: {title: "Days"},
+                yaxis: {title: "Amount Spent (£)"},
+                dragmode: false,
+                zoom: false,
+                paper_bgcolor: "transparent",
+                plot_bgcolor: "transparent"
+            };
+
+            Plotly.newPlot("graphContainer1", plotting, layout, {displayModeBar: false, responsive: true});
+        }
+
+        // Call functions to display all dynamic data
+        showBudgetSize();
+        showCurrentBudget();
+        showFrequencyOfBudgetRenewal();
+        showSustainableSpending();
+        showOutliers();
+        showTodaySpending();
+        showFutureBudget();
+        showWeeklySpending();
+        showLatestGoodsPurchased();
+    </script>
+</body>
+</html>

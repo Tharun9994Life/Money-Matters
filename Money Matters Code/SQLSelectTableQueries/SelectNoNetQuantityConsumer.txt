@@ -1,0 +1,12 @@
+SELECT *
+FROM Consumers
+WHERE 
+(
+    SELECT 
+        SUM(CASE WHEN TradeType = 'BUY' THEN Quantity ELSE 0 END) -
+        SUM(CASE WHEN TradeType = 'SELL' THEN Quantity ELSE 0 END)
+    FROM Trades
+    WHERE Consumers.ConsumerID = ?
+    AND Trades.ConsumerID = Consumers.ConsumerID
+) <= 0
+AND StockBudget <= 0;

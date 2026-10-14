@@ -1,0 +1,10 @@
+CREATE TABLE Purchase (
+    PurchaseID INT IDENTITY(1,1),
+    ConsumerID INT NOT NULL,
+    GoodID INT NOT NULL,
+    PurchaseDate DATETIME DEFAULT GETDATE(),
+    QuantityBought INT NOT NULL,
+	PRIMARY KEY (PurchaseID),
+    FOREIGN KEY (ConsumerID) REFERENCES Consumers(ConsumerID),
+    FOREIGN KEY (GoodID) REFERENCES Goods(GoodID)
+);

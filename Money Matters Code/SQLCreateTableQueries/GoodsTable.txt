@@ -1,0 +1,6 @@
+CREATE TABLE Goods (
+    GoodID INT IDENTITY(1,1),
+    GoodName VARCHAR(30) NOT NULL,
+    GoodPrice DECIMAL(10, 2) NOT NULL,
+	PRIMARY KEY (GoodID)
+);

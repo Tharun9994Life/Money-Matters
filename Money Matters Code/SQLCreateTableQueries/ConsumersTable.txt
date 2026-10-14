@@ -1,0 +1,17 @@
+CREATE TABLE Consumers (
+	ConsumerID INT IDENTITY(1,1) NOT NULL,
+	FirstName VARCHAR(30) NOT NULL,
+	LastName VARCHAR(30) NOT NULL,
+	Age INT NOT NULL,
+	DateOfBirth Date NOT NULL,
+	Email VARCHAR(75) NOT NULL, 
+	PhoneNumber VARCHAR(20) NOT NULL,
+	Password VARCHAR(MAX) NOT NULL,
+	BudgetSize DECIMAL(10, 2) DEFAULT 0.00 NULL,
+	CurrentBudget DECIMAL(10, 2) DEFAULT 0.00 NULL,
+	LastRenewed DATETIME DEFAULT GETDATE(),
+    FrequencyOfRenewal VARCHAR(10) DEFAULT 'Pending' NULL,
+    SustainableSpending DECIMAL(10, 2) NULL,
+	StockBudget DECIMAL(10, 2) NOT NULL DEFAULT 10000.00,
+	PRIMARY KEY (ConsumerID)
+)

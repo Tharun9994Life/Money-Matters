@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="stylesheet" href="/css/figures-economic.css"/>
+
+<head>
+    <title>Money Matters</title>
+</head>
+
+<body>
+    <div id="all">
+        <h1>Economic Figures</h1>
+
+        <!-- Navigation bar -->
+        <nav id="dashboardNavbar">
+            <a th:href="@{/news}">Economic News</a>
+            <a th:href="@{/figures-economic}">Economic Figures</a>
+            <a th:href="@{/exchange-rate-economic}">Exchange Rates</a>
+            <a th:href="@{/rate-the-economy}">Rate The Economy</a>
+            <a th:href="@{/budget-tracker}">Budget Tracker</a>
+            <a th:href="@{/investor}">Investor Centre</a>
+            <a th:href="@{/cost-of-production}">Cost Of Production</a>
+            <a th:href="@{/user-dashboard}">DashBoard</a>
+        </nav>
+
+        <!-- Form to select a country and indicator -->
+        <div>
+            <form id="countrySelect" action="/figures-economic" method="post">
+                <label>Select a Country:</label>
+                <select id="countryCode" name="countryCode">
+                    <option th:each="entry : ${countryCodes}"
+                            th:value="${entry.value}"
+                            th:text="${entry.key}"
+                            th:selected="${selectedCountry} == ${entry.key}">
+                    </option>
+                </select>
+                <br>
+
+                <label>Select an Indicator:</label>
+                <select id="indicatorCode" name="indicatorCode">
+                    <option value="NY.GDP.MKTP.CD" th:selected="${selectedIndicator == 'GDP'}">GDP</option>
+                    <option value="NY.GDP.PCAP.CD" th:selected="${selectedIndicator == 'GDP Per Capita'}">GDP per Capita</option>
+                    <option value="FP.CPI.TOTL.ZG" th:selected="${selectedIndicator == 'Inflation (CPI)'}">Inflation (CPI)</option>
+                    <option value="SL.UEM.TOTL.ZS" th:selected="${selectedIndicator == 'Real Interest Rate'}">Real Interest Rate</option>
+                    <option value="FR.INR.RINR" th:selected="${selectedIndicator == 'Total Unemployment'}">Total Unemployment</option>
+                    <option value="SI.POV.GINI" th:selected="${selectedIndicator == 'Gini Index'}">Gini Index</option>
+                    <option value="GC.DOD.TOTL.GD.ZS" th:selected="${selectedIndicator == 'Total Central Government Debt'}">Total Central Government Debt</option>
+                    <option value="BN.GSR.GNFS.CD" th:selected="${selectedIndicator == 'Net Trade In Goods & Services'}">Net Trade In Goods & Services</option>
+                    <option value="NE.TRD.GNFS.ZS" th:selected="${selectedIndicator == 'Trade (% of GDP)'}">Trade (% of GDP)</option>
+                    <option value="GC.TAX.TOTL.CN" th:selected="${selectedIndicator == 'Tax revenue (current LCU)'}">Tax revenue (current LCU)</option>
+                    <option value="GC.TAX.TOTL.GD.ZS" th:selected="${selectedIndicator == 'Tax revenue (% of GDP)'}">Tax revenue (% of GDP)</option>
+                    <option value="FI.RES.TOTL.CD" th:selected="${selectedIndicator == 'Total reserves - includes gold'}">Total reserves - includes gold</option>
+                </select>
+                <br>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <!-- Container for plotting the indicator graph -->
+        <div id="graphContainer"></div>
+    </div>
+
+    <script th:inline="javascript">
+
+        function showGraph() {
+            let yearDataPairs = /*[[${yearDataPairs}]]*/ {};
+            if (yearDataPairs && Object.keys(yearDataPairs).length > 0) {
+                let years = Object.keys(yearDataPairs);
+                let data = Object.values(yearDataPairs);
+
+                var line1 = {
+                    x: years,
+                    y: data,
+                    type: 'scatter',
+                    name: 'Line 1'
+                };
+
+                var plotting = [line1];
+
+                // Determine y-axis title based on selected indicator
+                const indicatorCode = /*[[${indicatorCode}]]*/ "";
+                const country = /*[[${country}]]*/ "";
+                let yaxisTitle = "";
+
+                switch (indicatorCode) {
+                    case "NY.GDP.MKTP.CD":
+                        yaxisTitle = "GDP (current USD)";
+                        break;
+
+                    case "NY.GDP.PCAP.CD":
+                        yaxisTitle = "GDP per Capita (current USD)";
+                        break;
+
+                    case "FP.CPI.TOTL.ZG":
+                        yaxisTitle = "CPI (annual %)";
+                        break;
+
+                    case "SL.UEM.TOTL.ZS":
+                        yaxisTitle = "Real interest rate (%)";
+                        break;
+
+                    case "FR.INR.RINR":
+                        yaxisTitle = "Unemployment (% of total labor force)";
+                        break;
+
+                    case "SI.POV.GINI":
+                        yaxisTitle = "Gini Index";
+                        break;
+
+                    case "GC.DOD.TOTL.GD.ZS":
+                        yaxisTitle = "Debt (% of GDP)";
+                        break;
+
+                    case "BN.GSR.GNFS.CD":
+                        yaxisTitle = "Net Trade (BoP, current US$)";
+                        break;
+
+                    case "NE.TRD.GNFS.ZS":
+                        yaxisTitle = "Trade (% of GDP)";
+                        break;
+
+                    case "GC.TAX.TOTL.CN":
+                        yaxisTitle = "Tax revenue (current LCU)";
+                        break;
+
+                    case "GC.TAX.TOTL.GD.ZS":
+                        yaxisTitle = "Tax revenue (% of GDP)";
+                        break;
+
+                    case "FI.RES.TOTL.CD":
+                        yaxisTitle = "Total reserves (current US$)";
+                        break;
+
+                    default:
+                        yaxisTitle = "";
+                        break;
+                }
+
+                var layout = {
+                    title: country,
+                    xaxis: {title: "Year"},
+                    yaxis: {title: yaxisTitle},
+                    dragmode: false,
+                    zoom: false,
+                    paper_bgcolor: "transparent",
+                    plot_bgcolor: "transparent"
+                };
+
+                Plotly.newPlot("graphContainer", plotting, layout, {displayModeBar: false, responsive: true});
+            }
+        }
+
+        // Call functions to display all dynamic data
+        showGraph();
+    </script>
+</body>
+</html>
