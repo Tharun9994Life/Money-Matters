@@ -69,7 +69,7 @@ class InvestmentData:
         # Calculate the SMA trend based on the gradient
         if gradient > 0.25:
             trend = "Increasing"
-        elif gradient < 0.25:
+        elif gradient < -0.25:
             trend = "Decreasing"
         else:
             trend = "Stable"
